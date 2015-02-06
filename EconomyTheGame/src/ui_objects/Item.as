@@ -1,12 +1,12 @@
 package ui_objects
 {
+	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	
 	public class Item extends Sprite
 	{
-		public function Item()
-		{
-			super();
-		}
+		protected var image: Bitmap;
+		
+		// fill me up!
 	}
 }

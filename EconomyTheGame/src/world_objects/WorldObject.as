@@ -1,12 +1,23 @@
 package world_objects
 {
+	import flash.geom.Point;
+	
 	import ui_objects.Button;
 	
 	public class WorldObject extends Button
 	{
-		public function WorldObject()
+		public var worldObjectID:int;
+		
+		protected var location:Point;
+		protected var scale: Number;
+		protected var money:int;
+		protected var world:World;
+		
+		protected function setScale(_scale:Number):void
 		{
-			super();
+			scale = _scale;
+			this.scaleX = scale;
+			this.scaleY = scale;
 		}
 	}
 }
