@@ -40,6 +40,17 @@ package
 		public static const ExitWorldBtn:Class;
 		[Embed(source = "../Graphics/World/muteBtn.png")]
 		public static const MuteWorldBtn:Class;
+		
+		[Embed(source = "../Graphics/World/PlayerPlaceHolder.png")]
+		public static const PlayerImage:Class;
+		/**********************************/
+		
+		/*** Utility ***/
+		/**********************************/
+		[Embed(source = "../Graphics/Utility/NoImage.png")]
+		public static const NoImage:Class;
+		[Embed(source = "../Graphics/Utility/VCAM_Zone.png")]
+		public static const VCAM_zone:Class;
 		/**********************************/
 		
 		/*** Global Variables ***/

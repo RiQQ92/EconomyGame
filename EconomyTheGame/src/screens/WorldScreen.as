@@ -1,12 +1,15 @@
 package screens
 {
 	import ui_objects.Button;
+	
+	import world_objects.World;
 
 	public class WorldScreen extends Screen
 	{
 		private var exit:Button;
 		private var options:Button;
 		private var mute:Button;
+		private var world:World;
 		
 		public function WorldScreen()
 		{
@@ -18,7 +21,7 @@ package screens
 		
 		private function initialize():void
 		{
-			image = Assets.getTexture("WorldBG");
+			world = new World();
 			
 			overlay = Assets.getTexture("WorldHUD");
 			overlay.x = Assets.gameStage.stageWidth -overlay.width;
@@ -34,12 +37,11 @@ package screens
 			exit = new Button("ExitWorldBtn");
 			exit.x = options.x + 50;
 			exit.y = 5;
-			
 		}
 		
 		private function draw():void
 		{
-			this.addChild(image);
+			this.addChild(world);
 			this.addChild(overlay);
 			this.addChild(exit);
 			this.addChild(options);

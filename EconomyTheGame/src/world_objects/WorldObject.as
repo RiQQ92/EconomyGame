@@ -13,6 +13,11 @@ package world_objects
 		protected var money:int;
 		protected var world:World;
 		
+		public function WorldObject()
+		{
+			super();
+		}
+		
 		protected function setScale(_scale:Number):void
 		{
 			scale = _scale;

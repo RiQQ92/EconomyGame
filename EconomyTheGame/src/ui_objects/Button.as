@@ -9,7 +9,7 @@ package ui_objects
 	import flash.ui.MouseCursor;
 	import flash.ui.MouseCursorData;
 	
-	public class Button extends Sprite
+	public class Button extends Item
 	{
 		private var mouseDown:Boolean = false;
 		//private var sound:Sound = Assets.getSound("Aani_btnclick");
@@ -18,10 +18,9 @@ package ui_objects
 		private var darker:ColorTransform = new ColorTransform(0.8, 0.8, 0.8, 1);
 		private var normal:BitmapData;
 		
-		private var image:Bitmap;
 		private var clickFunc:Function;
 		
-		public function Button(imageName:String, highlights:Boolean = true)
+		public function Button(imageName:String = "NoImage", highlights:Boolean = true)
 		{
 			super();
 			
@@ -32,8 +31,9 @@ package ui_objects
 				this.addEventListener(MouseEvent.MOUSE_DOWN, darken);
 				Assets.gameStage.addEventListener(MouseEvent.MOUSE_UP, mouseRelease);
 			}
+			if(image == null)
+				image = Assets.getTexture(imageName);
 			
-			image = Assets.getTexture(imageName);
 			image.x = 0;
 			image.y = 0;
 			this.addChild(image);

@@ -56,15 +56,15 @@ package utility
 			scenery.scaleX = xScale;
 			scenery.scaleY = yScale;
 			
-			if((cX - (objParent.x * xScale)) <= 0 && (cX - (objParent.x * xScale)) >= (-scenery.width +myStage.stageWidth))
-			{
+			//if((cX - (objParent.x * xScale)) <= 0 && (cX - (objParent.x * xScale)) >= (-scenery.width +myStage.stageWidth))
+			//{
 				scenery.x = cX - (objParent.x * xScale);
-			}
+			//}
 			
-			if((cY - (objParent.y * yScale)) <= 0 && (cY - (objParent.y * yScale)) >= (-scenery.height +myStage.stageHeight))
-			{
+			//if((cY - (objParent.y * yScale)) <= 0 && (cY - (objParent.y * yScale)) >= (-scenery.height +myStage.stageHeight))
+			//{
 				scenery.y = cY - (objParent.y * yScale);
-			}
+			//}
 		}
 		
 		public function resetCamera():void
