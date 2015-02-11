@@ -4,6 +4,8 @@ package
 	import flash.display.Stage;
 	import flash.media.Sound;
 	import flash.utils.Dictionary;
+	
+	import utility.ScreenHandle;
 
 	public class Assets
 	{
@@ -11,13 +13,10 @@ package
 		/**********************************/
 		[Embed(source = "../Graphics/Menu/New_btn.png")]
 		public static const NewMenuBtn:Class;
-		
 		[Embed(source = "../Graphics/Menu/Load_btn.png")]
 		public static const LoadMenuBtn:Class;
-		
 		[Embed(source = "../Graphics/Menu/Options_btn.png")]
 		public static const OptionsMenuBtn:Class;
-		
 		[Embed(source = "../Graphics/Menu/Credits_btn.png")]
 		public static const CreditsMenuBtn:Class;
 		
@@ -26,9 +25,27 @@ package
 		
 		/**********************************/
 		
+		/*** WorldScreen ***/
+		/**********************************/
+		
+		[Embed(source = "../Graphics/World/Map.jpg")]
+		public static const WorldBG:Class;
+		
+		[Embed(source = "../Graphics/World/WorldScreen_Hud.png")]
+		public static const WorldHUD:Class;
+		
+		[Embed(source = "../Graphics/World/optionsBtn.png")]
+		public static const OptionsWorldBtn:Class;
+		[Embed(source = "../Graphics/World/exitBtn.png")]
+		public static const ExitWorldBtn:Class;
+		[Embed(source = "../Graphics/World/muteBtn.png")]
+		public static const MuteWorldBtn:Class;
+		/**********************************/
+		
 		/*** Global Variables ***/
 		/**********************************/
 		public static var gameStage:Stage;
+		public static var screenHandle:ScreenHandle;
 		/**********************************/
 		
 		private static var gameTextures:Dictionary = new Dictionary();

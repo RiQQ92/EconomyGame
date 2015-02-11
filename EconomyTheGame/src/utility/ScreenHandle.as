@@ -5,11 +5,13 @@ package utility
 	import flash.sampler.StackFrame;
 	
 	import screens.StartScreen;
+	import screens.WorldScreen;
 	
 	public class ScreenHandle extends Sprite
 	{
 		public var myStage:Stage;
 		private var menu:StartScreen;
+		private var world:WorldScreen;
 		
 		private var _inScreen:String = "Empty";
 		
@@ -37,14 +39,17 @@ package utility
 						break;
 					case "menu":
 						
-						menu = new StartScreen(this);
+						menu = new StartScreen();
 						menu.x = 0;
 						menu.y = 0;
 						this.addChild(menu);
 						
 						break;
-					case "muistipeli":
-						
+					case "world":
+						world = new WorldScreen();
+						world.x = 0;
+						world.y = 0;
+						this.addChild(world);
 						
 						break;
 					case "labyrintti":
@@ -84,8 +89,8 @@ package utility
 						this.removeChild(menu);
 						
 						break;
-					case "muistipeli":
-						
+					case "world":
+						this.removeChild(world);
 						
 						break;
 					case "labyrintti":

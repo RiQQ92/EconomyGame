@@ -2,6 +2,7 @@ package screens
 {
 	
 	import flash.display.Bitmap;
+	import flash.events.MouseEvent;
 	
 	import ui_objects.Button;
 	
@@ -14,14 +15,11 @@ package screens
 		private var optionsBtn:Button = new Button("OptionsMenuBtn");
 		private var creditsBtn:Button = new Button("CreditsMenuBtn");
 		
-		private var screenHandle:ScreenHandle;
-		
-		public function StartScreen(scrnHandle:ScreenHandle)
+		public function StartScreen()
 		{
 			super();
 			
 			image = Assets.getTexture("StartMenuBG");
-			screenHandle = scrnHandle;
 			
 			draw();
 			initialize();
@@ -31,6 +29,7 @@ package screens
 		{
 			newBtn.x = this.width/2 - newBtn.width/2;
 			newBtn.y = this.height/4 - newBtn.height/2;
+			newBtn.addEventListener(MouseEvent.CLICK, startNew);
 			
 			loadBtn.x = this.width/2 - newBtn.width/2;
 			loadBtn.y = this.height/4 +100 - newBtn.height/2;
@@ -40,6 +39,11 @@ package screens
 			
 			creditsBtn.x = this.width/2 - newBtn.width/2;
 			creditsBtn.y = this.height/4 +300 - newBtn.height/2;
+		}
+		
+		protected function startNew(event:MouseEvent):void
+		{
+			changeScreen("world");
 		}
 		
 		private function draw():void
