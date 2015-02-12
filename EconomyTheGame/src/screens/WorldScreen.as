@@ -46,7 +46,7 @@ package screens
 		
 		private function exitToMenu(event:MouseEvent):void
 		{
-			var qBox:QuestionWindow = new QuestionWindow("Are you sure you want to exit?", goToMenu);
+			var qBox:QuestionWindow = new QuestionWindow("Want to exit?", goToMenu);
 			this.addChild(qBox);
 		}
 		

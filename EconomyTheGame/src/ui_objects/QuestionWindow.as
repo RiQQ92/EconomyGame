@@ -3,10 +3,14 @@ package ui_objects
 	import flash.events.FullScreenEvent;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
+	import flash.text.TextFieldAutoSize;
 
 	public class QuestionWindow extends Item
 	{
 		private var qboxName:TextField = new TextField();
+		private var font:TextFormat = new TextFormat();
 		
 		private var yes:Button;
 		private var no:Button;
@@ -18,7 +22,13 @@ package ui_objects
 		{
 			super();
 			
+			font.size = 30;
+			font.bold = true;
+			font.align = TextFormatAlign.CENTER;
+			
+			qboxName.defaultTextFormat = font;
 			qboxName.text = name;
+			
 			funcYes = _funcYes;
 			if(_funcNo == null)
 				funcNo = exit;
@@ -57,8 +67,14 @@ package ui_objects
 			no.x = yes.x +50 +yes.width;
 			no.y = yes.y;
 			
+			qboxName.selectable = false;
 			qboxName.x = image.width/2 -200;
-			qboxName.y = image.height/2 - 170;
+			qboxName.y = image.height/2 - 114;
+			qboxName.width = 400;
+			qboxName.autoSize = TextFieldAutoSize.CENTER;
+			qboxName.border = true;
+			qboxName.background = true;
+			qboxName.backgroundColor = 0xEC9035;
 			
 			no.addEventListener(MouseEvent.CLICK, answNo);
 			yes.addEventListener(MouseEvent.CLICK, answYes);
