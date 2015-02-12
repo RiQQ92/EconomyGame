@@ -1,13 +1,14 @@
 package world_objects
 {
 	import flash.display.Bitmap;
-	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.ui.Keyboard;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	import utility.VCam;
+	
+	
 	
 	public class Player extends Moving
 	{
@@ -15,10 +16,12 @@ package world_objects
 		private var keyDown:Boolean = false;
 		private var keyLeft:Boolean = false;
 		private var keyRight:Boolean = false;
+		private var isTravelling:Boolean = false;
 		
-		private var lastMoveX:int = 0;
-		private var lastMoveY:int = 0;
-		private var _speed:int = 5;
+		private var _speed:Number = 5;
+		
+		private var xySpeed:Point = new Point(0,0);
+		private var target:Point = new Point(0,0);
 		
 		private var myStage:Stage;
 		private var cam:VCam;
@@ -33,18 +36,21 @@ package world_objects
 			creator = _creator;
 			cam = new VCam(this, creator);
 			this.addChild(image);
+			image.x = -image.width/2;
+			image.y = -image.height/2;
 			
-			myStage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
-			myStage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
+			//myStage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
+			//myStage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
+			myStage.addEventListener(MouseEvent.CLICK, getClickPos);
 			myStage.addEventListener(Event.ENTER_FRAME, update);
 		}
 		
-		public function get speed():int
+		public function get speed():Number
 		{
 			return _speed;
 		}
 		
-		public function set speed(value:int):void
+		public function set speed(value:Number):void
 		{
 			_speed = value;
 		}
@@ -56,89 +62,65 @@ package world_objects
 			cam = null;
 			this.removeChild(image);
 		}
-		
-		private function onKeyPress(event:KeyboardEvent):void
+
+		private function getDir(pointA:Point, pointB:Point):Number
 		{
-			switch(event.keyCode)
-			{
-				case Keyboard.UP:
-					this.keyUp = true;
-					break;
-				case Keyboard.DOWN:
-					
-					this.keyDown = true;
-					break;
-				case Keyboard.LEFT:
-					
-					this.keyLeft = true;
-					break;
-				case Keyboard.RIGHT:
-					
-					this.keyRight = true;
-					break;
-			}
+			var calcObj:Object = {x:0,y:0};
+			var Dir:Number;
+			
+			calcObj.x = pointA.x - pointB.x;
+			calcObj.y = pointA.y - pointB.y;
+			
+			Dir = Math.atan2(calcObj.y, calcObj.x)/ Math.PI * 180;
+			
+			//Dir -= 180;
+			
+			return(Dir);
 		}
 		
-		private function onKeyRelease(event:KeyboardEvent):void
+		// laskee nopeudet x ja y akseleille kulman ja nopeuskertoimen perusteella
+		private function setVector(dir:Number, speed:Number):Point
 		{
-			switch(event.keyCode)
-			{
-				case Keyboard.UP:
-					
-					this.keyUp = false;
-					break;
-				case Keyboard.DOWN:
-					
-					this.keyDown = false;
-					break;
-				case Keyboard.LEFT:
-					
-					this.keyLeft = false;
-					break;
-				case Keyboard.RIGHT:
-					
-					this.keyRight = false;
-					break;
-			}
+			var xspeed:Number = Math.cos(dir*Math.PI/180)*speed;
+			var yspeed:Number = Math.sin(dir*Math.PI/180)*speed;
+			var retPoint:Point = new Point(xspeed, yspeed);
+			return retPoint;
+		}
+		
+		// palauttaa a pisteen kulman b pisteeseen
+		private function getClickPos(event:MouseEvent):void
+		{
+			isTravelling = true;
+			target.x = myStage.mouseX + this.x - myStage.stageWidth/2;
+			target.y = myStage.mouseY + this.y - myStage.stageHeight/2;
+			
+			var dir:Number = getDir(target, new Point(this.x, this.y));
+			xySpeed = setVector(dir, _speed);
+			
+			var pointerAnim:Pointer = new Pointer();
+			pointerAnim.x = target.x;
+			pointerAnim.y = target.y;
+			creator.addChild(pointerAnim);
 		}
 		
 		private function update(event:Event):void
 		{
-			if(keyUp)
+			if(isTravelling)
 			{
-				//if((this.y) > 0)
-				//{
-					this.y -= this.speed;
-					lastMoveY -= this.speed;
-				//}
+				if(this.x > target.x - _speed && this.x < target.x + _speed && this.y > target.y - _speed && this.y < target.y + _speed)
+				{
+					isTravelling = false;
+					target.x = 0;
+					target.y = 0;
+				}
+				else
+				{
+					this.x += xySpeed.x;
+					this.y += xySpeed.y;
+				}
+				
+				//if moving // if count > 6 then create dust cloud
 			}
-			if(keyDown)
-			{
-				//if((this.y + this.height) < creator.height)
-				//{
-					this.y += this.speed;
-					lastMoveY += this.speed;
-				//}
-			}
-			if(keyLeft)
-			{
-				//if((this.x) > 0)
-				//{
-					this.x -= this.speed;
-					lastMoveX -= this.speed;
-				//}
-			}
-			if(keyRight)
-			{
-				//if((this.x + this.width) < creator.width)
-				//{
-					this.x += this.speed;
-					lastMoveX += this.speed;
-				//}
-			}
-			
-			lastMoveX = 0;
-			lastMoveY = 0;
 		}
 	}
 }

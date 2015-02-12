@@ -23,6 +23,14 @@ package
 		[Embed(source = "../Graphics/Menu/StartScreen_BG.png")]
 		public static const StartMenuBG:Class;
 		
+		// other menu instances
+		[Embed(source = "../Graphics/Menu/Yes_btn.png")]
+		public static const YesMenuBtn:Class;
+		[Embed(source = "../Graphics/Menu/No_btn.png")]
+		public static const NoMenuBtn:Class;
+		
+		[Embed(source = "../Graphics/Menu/QuestionWindow.png")]
+		public static const QuestionMenuWindow:Class;
 		/**********************************/
 		
 		/*** WorldScreen ***/

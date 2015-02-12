@@ -16,6 +16,7 @@ package world_objects
 		{
 			super();
 			
+			buttonMode = false;
 			initialize();
 			draw();
 		}

@@ -1,6 +1,9 @@
 package screens
 {
+	import flash.events.MouseEvent;
+	
 	import ui_objects.Button;
+	import ui_objects.QuestionWindow;
 	
 	import world_objects.World;
 
@@ -37,6 +40,19 @@ package screens
 			exit = new Button("ExitWorldBtn");
 			exit.x = options.x + 50;
 			exit.y = 5;
+			
+			exit.addEventListener(MouseEvent.CLICK, exitToMenu);
+		}
+		
+		private function exitToMenu(event:MouseEvent):void
+		{
+			var qBox:QuestionWindow = new QuestionWindow("Are you sure you want to exit?", goToMenu);
+			this.addChild(qBox);
+		}
+		
+		private function goToMenu():void
+		{
+			changeScreen("menu");
 		}
 		
 		private function draw():void
