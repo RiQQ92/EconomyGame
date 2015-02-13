@@ -53,6 +53,8 @@ package
 		
 		[Embed(source = "../Graphics/World/PlayerPlaceHolder.png")]
 		public static const PlayerImage:Class;
+		[Embed(source = "../Graphics/World/Town.png")]
+		public static const TownImage:Class;
 		/**********************************/
 		
 		/*** Utility ***/

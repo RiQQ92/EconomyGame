@@ -15,16 +15,40 @@ package world_objects
 		
 		private var map:Map;
 		
+		public var worldObjects:Array = new Array();
+		
 		public function World()
 		{
 			super();
 			
 			Assets.gameWorld = this;
 			
+			allocTownNames();
 			initialize();
 			draw();
 			
 			this.addEventListener(Event.ENTER_FRAME, update);
+		}
+		
+		private function allocTownNames():void
+		{
+			// TODO Auto Generated method stub
+			
+		}
+		
+		private function addTowns():void
+		{
+			for(var i:int = 0;i < 2; i++)
+			{
+				for(var b:int = 0; b < 2; b++)
+				{
+					var town:Town = new Town();
+					town.x = -150 +i*300;
+					town.y = -150 +b*300;
+					this.addChild(town);
+					worldObjects.push(town);
+				}
+			}
 		}
 		
 		public function get player():Player
@@ -70,6 +94,7 @@ package world_objects
 		
 		private function draw():void
 		{
+			addTowns();
 			this.addChild(player);
 		}
 	}

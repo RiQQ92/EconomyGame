@@ -117,6 +117,7 @@ package world_objects
 					this.y += xySpeed.y;
 				}
 				
+				//if moving then check worldobjects collision
 				//if moving // if count > 6 then create dust cloud
 			}
 		}

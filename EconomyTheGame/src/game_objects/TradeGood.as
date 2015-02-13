@@ -9,7 +9,7 @@ package game_objects
 		private var price:int;
 		private var amount:int;
 		private var quality:Number
-		private var name:String;
+		private var goodsName:String;
 		private var qualityCondition:TextField;
 		
 		public function TradeGood(_price:int, _amount:int, _name:String, _quality:Number = 0.5)

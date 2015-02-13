@@ -13,7 +13,7 @@ package game_objects
 		private var productionFactor:int;
 		private var consumingFactor:int;
 		private var upgradeAmount:Number;
-		private var name:String;
+		private var industryName:String;
 		
 		private var logo:Bitmap;
 		private var town:Town;
@@ -29,7 +29,7 @@ package game_objects
 		
 		private function checkGoods():Boolean
 		{
-			
+			return true;
 		}
 		
 		private function payWages():void
