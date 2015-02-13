@@ -41,8 +41,7 @@ package utility
 			
 			myStage.scaleMode = oldMode;
 			myStage.align = StageAlign.TOP_LEFT;
-			if(this.width < scenery.width)
-				addEventListener(Event.ENTER_FRAME, camControl);
+			addEventListener(Event.ENTER_FRAME, camControl);
 		}
 		
 		private function camControl(event:Event):void

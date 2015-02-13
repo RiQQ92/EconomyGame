@@ -3,7 +3,6 @@ package world_objects
 	import flash.display.Bitmap;
 	import flash.display.Stage;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
 	import utility.VCam;
@@ -41,7 +40,6 @@ package world_objects
 			
 			//myStage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			//myStage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
-			myStage.addEventListener(MouseEvent.CLICK, getClickPos);
 			myStage.addEventListener(Event.ENTER_FRAME, update);
 		}
 		
@@ -88,11 +86,11 @@ package world_objects
 		}
 		
 		// palauttaa a pisteen kulman b pisteeseen
-		private function getClickPos(event:MouseEvent):void
+		public function giveTargetPos(_x:Number, _y:Number):void
 		{
 			isTravelling = true;
-			target.x = myStage.mouseX + this.x - myStage.stageWidth/2;
-			target.y = myStage.mouseY + this.y - myStage.stageHeight/2;
+			target.x = _x;
+			target.y = _y;
 			
 			var dir:Number = getDir(target, new Point(this.x, this.y));
 			xySpeed = setVector(dir, _speed);

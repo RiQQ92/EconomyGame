@@ -1,6 +1,8 @@
 package world_objects
 {
 	import flash.display.Bitmap;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
 
 	public class Map extends WorldObject
 	{
@@ -8,6 +10,9 @@ package world_objects
 		private var NE:Bitmap = Assets.getTexture("WorldBG");
 		private var SE:Bitmap = Assets.getTexture("WorldBG");
 		private var SW:Bitmap = Assets.getTexture("WorldBG");
+		
+		private var player:Player;
+		private var target:Point = new Point(0,0);
 		
 		public var xSize:int;
 		public var ySize:int;
@@ -19,6 +24,14 @@ package world_objects
 			buttonMode = false;
 			initialize();
 			draw();
+			this.addEventListener(MouseEvent.CLICK, getClickPos);
+		}
+		
+		protected function getClickPos(event:MouseEvent):void
+		{
+			target.x = this.mouseX +this.x;
+			target.y = this.mouseY +this.y;
+			player.giveTargetPos(target.x, target.y);
 		}
 		
 		public function swapToLeft():void
@@ -71,6 +84,8 @@ package world_objects
 			
 			xSize = NW.width*2;
 			ySize = NW.height*2;
+			
+			player = world.player;
 		}
 		
 		private function draw():void

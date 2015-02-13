@@ -8,16 +8,18 @@ package world_objects
 	public class World extends Item
 	{
 		private var offset:Point;
-		private var player:Player;
+		private var _player:Player;
 		
 		private var xMultiplier:int = 0;
 		private var yMultiplier:int = 0;
 		
-		private var map:Map = new Map();
+		private var map:Map;
 		
 		public function World()
 		{
 			super();
+			
+			Assets.gameWorld = this;
 			
 			initialize();
 			draw();
@@ -25,6 +27,11 @@ package world_objects
 			this.addEventListener(Event.ENTER_FRAME, update);
 		}
 		
+		public function get player():Player
+		{
+			return _player;
+		}
+
 		private function update(event:Event):void
 		{
 			// swap map pieces to left and right
@@ -54,10 +61,11 @@ package world_objects
 		
 		private function initialize():void
 		{
+			_player = new Player(this);
+			map = new Map();
 			map.x = -map.xSize/2;
 			map.y = -map.ySize/2;
 			this.addChild(map);
-			player = new Player(this);
 		}
 		
 		private function draw():void

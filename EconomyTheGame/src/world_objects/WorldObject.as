@@ -16,6 +16,8 @@ package world_objects
 		public function WorldObject()
 		{
 			super();
+			
+			world = Assets.gameWorld;
 		}
 		
 		protected function setScale(_scale:Number):void

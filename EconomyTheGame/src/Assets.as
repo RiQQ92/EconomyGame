@@ -6,6 +6,8 @@ package
 	import flash.utils.Dictionary;
 	
 	import utility.ScreenHandle;
+	
+	import world_objects.World;
 
 	public class Assets
 	{
@@ -64,6 +66,7 @@ package
 		/*** Global Variables ***/
 		/**********************************/
 		public static var gameStage:Stage;
+		public static var gameWorld:World;
 		public static var screenHandle:ScreenHandle;
 		/**********************************/
 		
