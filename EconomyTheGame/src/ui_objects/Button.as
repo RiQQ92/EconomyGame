@@ -51,7 +51,7 @@ package ui_objects
 		{
 			mouseDown = false;
 			image.bitmapData = normal.clone();
-			if(this.hitTestPoint(Assets.gameStage.mouseX, Assets.gameStage.mouseY))
+			if(image.hitTestPoint(Assets.gameStage.mouseX, Assets.gameStage.mouseY))
 				image.bitmapData.colorTransform(image.bitmapData.rect, lightier);
 		}
 		
@@ -92,10 +92,27 @@ package ui_objects
 			//sound.play();
 		}
 		
-		public function removeListeners():void
+		private function removeListeners():void
 		{
-			this.removeEventListener(MouseEvent.CLICK, clickFunc);
+			if(clickFunc != null)
+				this.removeEventListener(MouseEvent.CLICK, clickFunc);
+			
 			this.removeEventListener(MouseEvent.CLICK, clickSound);
+			this.removeEventListener(MouseEvent.ROLL_OVER, lighten);
+			this.removeEventListener(MouseEvent.ROLL_OUT, resetColor);
+			this.removeEventListener(MouseEvent.MOUSE_DOWN, darken);
+			Assets.gameStage.removeEventListener(MouseEvent.MOUSE_UP, mouseRelease);
+		}
+		
+		override public function destruct():void
+		{
+			removeListeners();
+			
+			lightier = null;
+			darker = null;
+			normal = null;
+			clickFunc = null;
+			super.destruct();
 		}
 	}
 }

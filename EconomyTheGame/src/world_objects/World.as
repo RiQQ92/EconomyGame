@@ -2,6 +2,7 @@ package world_objects
 {
 	import flash.events.Event;
 	import flash.geom.Point;
+	import flash.sensors.Accelerometer;
 	
 	import ui_objects.Item;
 	
@@ -12,6 +13,9 @@ package world_objects
 		
 		private var xMultiplier:int = 0;
 		private var yMultiplier:int = 0;
+		
+		private var townNames:Array;
+		private var usedNames:Array = new Array();
 		
 		private var map:Map;
 		
@@ -32,8 +36,18 @@ package world_objects
 		
 		private function allocTownNames():void
 		{
-			// TODO Auto Generated method stub
-			
+			townNames = new Array();
+			townNames.push("Sandstorm");
+			townNames.push("Last Resort");
+			townNames.push("Hope's End");
+			townNames.push("no Return");
+			townNames.push("End of Line");
+			townNames.push("Final Destination");
+			townNames.push("Quebek");
+			townNames.push("Trumph");
+			townNames.push("Griif");
+			townNames.push("Frovel");
+			townNames.push("Harmes");
 		}
 		
 		private function addTowns():void
@@ -42,13 +56,36 @@ package world_objects
 			{
 				for(var b:int = 0; b < 2; b++)
 				{
-					var town:Town = new Town();
+					var town:Town = createRandomTown();
 					town.x = -150 +i*300;
 					town.y = -150 +b*300;
 					this.addChild(town);
 					worldObjects.push(town);
 				}
 			}
+		}
+		
+		private function createRandomTown():Town
+		{
+			var rand:int;
+			var found:Boolean;
+			do{
+				found = false;
+				rand = Math.floor(Math.random()*townNames.length);
+				for(var i:int = 0; i < usedNames.length; i++)
+				{
+					if(usedNames[i] == rand)
+						found = true;
+				}
+			}while(found);
+			
+			usedNames.push(rand);
+			var tempName:String = townNames[rand];
+			
+			rand = Math.floor(Math.random()*680+20);
+			var town:Town = new Town(tempName, rand);
+			
+			return (town);
 		}
 		
 		public function get player():Player
@@ -96,6 +133,33 @@ package world_objects
 		{
 			addTowns();
 			this.addChild(player);
+		}
+		
+		private function removeListeners():void
+		{
+			this.removeEventListener(Event.ENTER_FRAME, update);
+		}
+		
+		private function removeTowns():void
+		{
+			
+		}
+		
+		override public function destruct():void
+		{
+			removeListeners();
+			removeTowns();
+			
+			townNames = new Array();
+			townNames = null;
+			
+			map.destruct();
+			this.removeChild(map);
+			
+			player.Destruct();
+			this.removeChild(player);
+			
+			super.destruct();
 		}
 	}
 }

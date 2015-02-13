@@ -67,8 +67,12 @@ package
 		
 		/*** Global Variables ***/
 		/**********************************/
+		public static var worldObjCounter:int;
+		
+		public static var gamePaused:Boolean;
 		public static var gameStage:Stage;
 		public static var gameWorld:World;
+		
 		public static var screenHandle:ScreenHandle;
 		/**********************************/
 		

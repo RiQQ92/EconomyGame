@@ -86,11 +86,16 @@ package utility
 						
 						break;
 					case "menu":
+						menu.destruct();
 						this.removeChild(menu);
 						
 						break;
 					case "world":
-						this.removeChild(world);
+						if(value == "menu")
+						{
+							world.destruct();
+							this.removeChild(world);
+						}
 						
 						break;
 					case "labyrintti":

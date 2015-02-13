@@ -11,10 +11,6 @@ package world_objects
 	
 	public class Player extends Moving
 	{
-		private var keyUp:Boolean = false;
-		private var keyDown:Boolean = false;
-		private var keyLeft:Boolean = false;
-		private var keyRight:Boolean = false;
 		private var isTravelling:Boolean = false;
 		
 		private var _speed:Number = 5;
@@ -60,30 +56,6 @@ package world_objects
 			cam = null;
 			this.removeChild(image);
 		}
-
-		private function getDir(pointA:Point, pointB:Point):Number
-		{
-			var calcObj:Object = {x:0,y:0};
-			var Dir:Number;
-			
-			calcObj.x = pointA.x - pointB.x;
-			calcObj.y = pointA.y - pointB.y;
-			
-			Dir = Math.atan2(calcObj.y, calcObj.x)/ Math.PI * 180;
-			
-			//Dir -= 180;
-			
-			return(Dir);
-		}
-		
-		// laskee nopeudet x ja y akseleille kulman ja nopeuskertoimen perusteella
-		private function setVector(dir:Number, speed:Number):Point
-		{
-			var xspeed:Number = Math.cos(dir*Math.PI/180)*speed;
-			var yspeed:Number = Math.sin(dir*Math.PI/180)*speed;
-			var retPoint:Point = new Point(xspeed, yspeed);
-			return retPoint;
-		}
 		
 		// palauttaa a pisteen kulman b pisteeseen
 		public function giveTargetPos(_x:Number, _y:Number):void
@@ -103,23 +75,54 @@ package world_objects
 		
 		private function update(event:Event):void
 		{
-			if(isTravelling)
+			if(!Assets.gamePaused)
 			{
-				if(this.x > target.x - _speed && this.x < target.x + _speed && this.y > target.y - _speed && this.y < target.y + _speed)
+				for(var i:int = 0; i < world.worldObjects.length; i++)
 				{
-					isTravelling = false;
-					target.x = 0;
-					target.y = 0;
-				}
-				else
-				{
-					this.x += xySpeed.x;
-					this.y += xySpeed.y;
+					if(this.hitTestObject(world.worldObjects[i].hitBox))
+					{
+						trace("collision with: "+world.worldObjects[i].worldObjName);
+					}
 				}
 				
-				//if moving then check worldobjects collision
-				//if moving // if count > 6 then create dust cloud
+				if(isTravelling)
+				{
+					if(this.x > target.x - _speed && this.x < target.x + _speed && this.y > target.y - _speed && this.y < target.y + _speed)
+					{
+						isTravelling = false;
+						target.x = 0;
+						target.y = 0;
+					}
+					else
+					{
+						this.x += xySpeed.x;
+						this.y += xySpeed.y;
+					}
+					
+					//if moving then check worldobjects collision
+					//if moving // if count > 6 then create dust cloud
+				}
 			}
+		}
+		
+		private function removeListeners():void
+		{
+			myStage.removeEventListener(Event.ENTER_FRAME, update);
+		}
+		
+		override public function destruct():void
+		{
+			removeListeners();
+			
+			xySpeed = null;
+			target = null;
+			
+			myStage = null;
+			creator = null;
+			cam.Destruct();
+			this.removeChild(cam);
+			
+			super.destruct();
 		}
 	}
 }

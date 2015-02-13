@@ -22,8 +22,11 @@ package ui_objects
 		{
 			super();
 			
+			Assets.gamePaused = true;
+			
 			font.size = 30;
-			font.bold = true;
+			font.font = "Algerian";
+			//font.bold = true;
 			font.align = TextFormatAlign.CENTER;
 			
 			qboxName.defaultTextFormat = font;
@@ -52,7 +55,8 @@ package ui_objects
 		
 		private function exit():void
 		{
-			this.parent.removeChild(this);
+			Assets.gamePaused = false;
+			destruct();
 		}
 		
 		private function initialize():void
@@ -86,6 +90,26 @@ package ui_objects
 			this.addChild(qboxName);
 			this.addChild(yes);
 			this.addChild(no);
+		}
+		
+		override public function destruct():void
+		{
+			no.removeEventListener(MouseEvent.CLICK, answNo);
+			yes.removeEventListener(MouseEvent.CLICK, answYes);
+			
+			no.destruct();
+			yes.destruct();
+			
+			funcYes = null;
+			funcNo = null;
+			
+			qboxName = new TextField();
+			font = new TextFormat();
+			qboxName = null;
+			font = null;
+			
+			super.destruct();
+			this.parent.removeChild(this);
 		}
 	}
 }

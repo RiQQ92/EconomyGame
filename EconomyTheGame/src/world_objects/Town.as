@@ -2,28 +2,64 @@ package world_objects
 {
 	import flash.display.Bitmap;
 	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
 	
 	import game_objects.Industry;
 	import game_objects.TradeGood;
 
 	public class Town extends WorldObject
 	{
-		private var size: int
-		private var wealth: int
-		private var taxation: int //0..60
-		private var growthProgress: Number
-		private var cityName:String
-		private var sign:TextField;
+		private var size:int;
+		private var wealth:int;
+		private var taxation:int; //0..60
+		
+		private var growthProgress:Number;
+		
+		private var title:String = "";
+		private var titles:Array = new Array("City","Town","Village");
+		
+		private var font:TextFormat = new TextFormat();
+		private var sign:TextField = new TextField();
 		private var bigPicture:Bitmap;
+		
 		private var industries:Vector.<Industry>; //Industry[]
 		private var tradeGoods:Vector.<TradeGood>; //TradeGood[]
+		
 		//private var stats: Statistics
 		
-		public function Town()
+		public function Town(_townName:String, _townSize:int)
 		{
 			image = Assets.getTexture("TownImage");
 			
 			super();
+			
+			_worldObjName = _townName;
+			size = _townSize;
+			
+			if(size < 200)
+			{
+				title = titles[2];
+				setScale(0.8);
+			}
+			else if(size < 500)
+			{
+				title = titles[1];
+				setScale(1);
+			}
+			else
+			{
+				title = titles[0];
+				setScale(1.2);
+			}
+			
+			font.size = 20;
+			font.font = "Algerian";
+			font.align = TextFormatAlign.CENTER;
+			
+			sign.defaultTextFormat = font;
+			sign.text = title +" of:\n"+ _worldObjName;
 			
 			buttonMode = false;
 			mouseEnabled = false;
@@ -34,13 +70,21 @@ package world_objects
 		
 		private function initialize():void
 		{
-			// TODO Auto Generated method stub
-			
+			sign.selectable = false;
+			sign.mouseEnabled = false;
+			sign.x = (-200+image.width)/2;
+			sign.y = -50;
+			sign.width = 200;
+			sign.autoSize = TextFieldAutoSize.CENTER;
+			sign.border = true;
+			sign.background = true;
+			sign.backgroundColor = 0xEC9035;
 		}
 		
 		private function draw():void
 		{
 			this.addChild(image);
+			this.addChild(sign);
 		}
 		
 		private function collectTaxes(): int

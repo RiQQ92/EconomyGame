@@ -54,5 +54,22 @@ package screens
 			this.addChild(optionsBtn);
 			this.addChild(creditsBtn);
 		}
+		
+		private function removeListeners():void
+		{
+			newBtn.removeEventListener(MouseEvent.CLICK, startNew);
+		}
+		
+		override public function destruct():void
+		{
+			removeListeners();
+			
+			this.removeChild(newBtn);
+			this.removeChild(loadBtn);
+			this.removeChild(optionsBtn);
+			this.removeChild(creditsBtn);
+			
+			super.destruct();
+		}
 	}
 }

@@ -81,6 +81,7 @@ package utility
 			scenery.x = 0;
 			scenery.y = 0;
 			
+			myStage = null;
 			objParent = null;
 			scenery = null;
 			this.removeChild(image);

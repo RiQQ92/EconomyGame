@@ -22,5 +22,19 @@ package screens
 		{
 			screenHandle.inScreen = str;
 		}
+		
+		override public function destruct():void
+		{
+			if(overlay != null)
+				if(this.contains(overlay))
+					this.removeChild(overlay);
+			
+			if(overlay != null)
+				overlay = null;
+			
+			screenHandle = null;
+			
+			super.destruct();
+		}
 	}
 }

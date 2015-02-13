@@ -25,6 +25,7 @@ package screens
 		private function initialize():void
 		{
 			world = new World();
+			Assets.worldObjCounter = 0;
 			
 			overlay = Assets.getTexture("WorldHUD");
 			overlay.x = Assets.gameStage.stageWidth -overlay.width;
@@ -52,6 +53,7 @@ package screens
 		
 		private function goToMenu():void
 		{
+			Assets.gamePaused = false;
 			changeScreen("menu");
 		}
 		
@@ -62,6 +64,30 @@ package screens
 			this.addChild(exit);
 			this.addChild(options);
 			this.addChild(mute);
+		}
+		
+		private function removeListeners():void
+		{
+			exit.removeEventListener(MouseEvent.CLICK, exitToMenu);
+		}
+		
+		override public function destruct():void
+		{
+			removeListeners();
+			
+			world.destruct();
+			this.removeChild(world);
+			
+			exit.destruct();
+			this.removeChild(exit);
+			
+			options.destruct();
+			this.removeChild(options);
+			
+			mute.destruct();
+			this.removeChild(mute);
+			
+			super.destruct();
 		}
 	}
 }

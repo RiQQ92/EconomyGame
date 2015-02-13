@@ -12,6 +12,7 @@ package
 		
 		public function EconomyTheGame()
 		{
+			Assets.gamePaused = false;
 			screenHandle = new ScreenHandle(stage);
 			this.addChild(screenHandle);
 			Assets.screenHandle = screenHandle;

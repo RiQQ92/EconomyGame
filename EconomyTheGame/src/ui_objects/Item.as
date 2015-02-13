@@ -8,5 +8,14 @@ package ui_objects
 		protected var image: Bitmap;
 		
 		// fill me up!
+		public function destruct():void
+		{
+			if(image != null)
+				if(this.contains(image))
+					this.removeChild(image);
+			
+			if(image != null)
+				image = null;
+		}
 	}
 }
