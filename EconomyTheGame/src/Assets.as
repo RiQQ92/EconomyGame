@@ -35,6 +35,29 @@ package
 		public static const QuestionMenuWindow:Class;
 		/**********************************/
 		
+		/*** OPTIONS ***/
+		/**********************************/
+		[Embed(source = "../Graphics/Menu/OptionsScreen.png")]
+		public static const OptionsMenuScreen:Class;
+
+		// ok and cancel button needed maybe //
+		/**********************************/
+		
+		/*** MARKET ***/
+		/**********************************/
+		[Embed(source = "../Graphics/Town/TownScreen.png")]
+		public static const MainTownScreen:Class;
+		
+		[Embed(source = "../Graphics/Town/MarketTownBtn.png")]
+		public static const MarketTownBtn:Class;
+		[Embed(source = "../Graphics/Town/IndustriesTownBtn.png")]
+		public static const IndustriesTownBtn:Class;
+		[Embed(source = "../Graphics/Town/StatisticsTownBtn.png")]
+		public static const StatisticsTownBtn:Class;
+		[Embed(source = "../Graphics/Town/ExitTownBtn.png")]
+		public static const ExitTownBtn:Class;
+		/**********************************/
+		
 		/*** WorldScreen ***/
 		/**********************************/
 		

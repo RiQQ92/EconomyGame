@@ -42,7 +42,14 @@ package screens
 			exit.x = options.x + 50;
 			exit.y = 5;
 			
+			options.addEventListener(MouseEvent.CLICK, openOptions);
 			exit.addEventListener(MouseEvent.CLICK, exitToMenu);
+		}
+		
+		private function openOptions(event:MouseEvent):void
+		{
+			var optionsScreen:OptionScreen = new OptionScreen();
+			this.addChild(optionsScreen);
 		}
 		
 		private function exitToMenu(event:MouseEvent):void

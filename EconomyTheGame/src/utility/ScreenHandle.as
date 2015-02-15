@@ -52,10 +52,6 @@ package utility
 						this.addChild(world);
 						
 						break;
-					case "labyrintti":
-						
-						
-						break;
 					case "metsa":
 						
 						
@@ -98,15 +94,12 @@ package utility
 						}
 						
 						break;
-					case "labyrintti":
-						
-						
-						break;
 					
 					case "metsa":
 						
 						
 						break;
+					
 					case "pilkki":
 						
 						

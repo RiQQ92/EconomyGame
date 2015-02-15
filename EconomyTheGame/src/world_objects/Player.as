@@ -18,6 +18,7 @@ package world_objects
 		private var xySpeed:Point = new Point(0,0);
 		private var target:Point = new Point(0,0);
 		
+		private var currentTown:Town;
 		private var myStage:Stage;
 		private var cam:VCam;
 		private var creator:*;
@@ -77,11 +78,28 @@ package world_objects
 		{
 			if(!Assets.gamePaused)
 			{
+				if(currentTown != null)
+				{
+					if(!this.hitTestObject(currentTown.hitBox))
+					{
+						currentTown = null;
+					}
+				}
 				for(var i:int = 0; i < world.worldObjects.length; i++)
 				{
 					if(this.hitTestObject(world.worldObjects[i].hitBox))
 					{
-						trace("collision with: "+world.worldObjects[i].worldObjName);
+						//trace("collision with: "+world.worldObjects[i].worldObjName);
+						if(world.worldObjects[i] is Town)
+						{
+							if(world.worldObjects[i] != currentTown)
+							{
+								currentTown = world.worldObjects[i];
+								giveTargetPos(currentTown.x + currentTown.hitBox.width/2*currentTown.scaleX, currentTown.y + currentTown.hitBox.height/2*currentTown.scaleY);
+								world.openTownScreen(currentTown); // open town screen
+							}
+							//trace("I'm a town!");
+						}
 					}
 				}
 				

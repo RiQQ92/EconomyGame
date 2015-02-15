@@ -4,6 +4,8 @@ package world_objects
 	import flash.geom.Point;
 	import flash.sensors.Accelerometer;
 	
+	import screens.TownScreen;
+	
 	import ui_objects.Item;
 	
 	public class World extends Item
@@ -91,6 +93,12 @@ package world_objects
 		public function get player():Player
 		{
 			return _player;
+		}
+		
+		public function openTownScreen(town:Town):void
+		{
+			var townScreen:TownScreen = new TownScreen(town);
+			parent.addChild(townScreen);
 		}
 
 		private function update(event:Event):void

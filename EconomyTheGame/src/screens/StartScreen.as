@@ -29,7 +29,6 @@ package screens
 		{
 			newBtn.x = this.width/2 - newBtn.width/2;
 			newBtn.y = this.height/4 - newBtn.height/2;
-			newBtn.addEventListener(MouseEvent.CLICK, startNew);
 			
 			loadBtn.x = this.width/2 - newBtn.width/2;
 			loadBtn.y = this.height/4 +100 - newBtn.height/2;
@@ -39,11 +38,20 @@ package screens
 			
 			creditsBtn.x = this.width/2 - newBtn.width/2;
 			creditsBtn.y = this.height/4 +300 - newBtn.height/2;
+			
+			newBtn.addEventListener(MouseEvent.CLICK, startNew);
+			optionsBtn.addEventListener(MouseEvent.CLICK, openOptions);
 		}
 		
 		protected function startNew(event:MouseEvent):void
 		{
 			changeScreen("world");
+		}
+		
+		private function openOptions(event:MouseEvent):void
+		{
+			var optionsScreen:OptionScreen = new OptionScreen();
+			this.addChild(optionsScreen);
 		}
 		
 		private function draw():void
