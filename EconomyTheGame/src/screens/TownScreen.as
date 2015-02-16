@@ -2,6 +2,10 @@ package screens
 {
 	import flash.events.MouseEvent;
 	
+	import screens.tabs.IndustriesTab;
+	import screens.tabs.MarketTab;
+	import screens.tabs.StatisticsTab;
+	
 	import ui_objects.Button;
 	
 	import world_objects.Town;
@@ -13,6 +17,8 @@ package screens
 		private var statisticsTabBtn:Button;
 		
 		private var exitBtn:Button;
+		
+		private var currentTab:*;
 		
 		public function TownScreen(_town:Town)
 		{
@@ -42,7 +48,52 @@ package screens
 			exitBtn.x = Assets.gameStage.stageWidth - exitBtn.width -10;
 			exitBtn.y = statisticsTabBtn.y + statisticsTabBtn.height + 30;
 			
+			marketTabBtn.addEventListener(MouseEvent.CLICK, openMarketTab);
+			industriesTabBtn.addEventListener(MouseEvent.CLICK, openIndustriesTab);
+			statisticsTabBtn.addEventListener(MouseEvent.CLICK, openStatisticsTab);
 			exitBtn.addEventListener(MouseEvent.CLICK, close);
+		}
+		
+		protected function openMarketTab(event:MouseEvent):void
+		{
+			if(!this.contains(currentTab))
+			{
+				this.removeChild(currentTab);
+				currentTab = null;
+				currentTab = new MarketTab();
+			}
+			else
+			{
+				currentTab = new MarketTab();
+			}
+		}
+		
+		protected function openIndustriesTab(event:MouseEvent):void
+		{
+			if(!this.contains(currentTab))
+			{
+				this.removeChild(currentTab);
+				currentTab = null;
+				currentTab = new IndustriesTab();
+			}
+			else
+			{
+				currentTab = new IndustriesTab();
+			}
+		}
+		
+		protected function openStatisticsTab(event:MouseEvent):void
+		{
+			if(!this.contains(currentTab))
+			{
+				this.removeChild(currentTab);
+				currentTab = null;
+				currentTab = new StatisticsTab();
+			}
+			else
+			{
+				currentTab = new StatisticsTab();
+			}
 		}
 		
 		private function draw():void

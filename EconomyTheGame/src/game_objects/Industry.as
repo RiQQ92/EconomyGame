@@ -10,8 +10,6 @@ package game_objects
 	{
 		private var defWage:int;
 		private var size:int;
-		private var productionFactor:int;
-		private var consumingFactor:int;
 		private var upgradeAmount:Number;
 		private var industryName:String;
 		
@@ -22,7 +20,7 @@ package game_objects
 		private var productConsumed:TradeGood;
 		private var storage:Vector.<TradeGood>;
 		
-		public function Industry(defWage:int, productionFactor:int, comsumingFactor:int, name:String, productYield:TradeGood, productConsumed:TradeGood = null, size:int = 1)
+		public function Industry(defWage:int, name:String, productYield:Vector.<TradeGood>, productConsumed:Vector.<TradeGood> = null, size:int = 1)
 		{
 			super();
 		}

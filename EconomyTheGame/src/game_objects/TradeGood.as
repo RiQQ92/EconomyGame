@@ -8,20 +8,35 @@ package game_objects
 	{
 		private var price:int;
 		private var amount:int;
+		private var _productionFactor:int;
+		private var _consumingFactor:int;
+		
 		private var quality:Number
 		private var goodsName:String;
 		private var qualityCondition:TextField;
 		
-		public function TradeGood(_price:int, _amount:int, _name:String, _quality:Number = 0.5)
+		public function TradeGood(_price:int, _amount:int, _name:String, productionFactor:int, comsumingFactor:int, _quality:Number = 0.5)
 		{
 			super();
 			
+			_productionFactor = productionFactor;
+			_consumingFactor = comsumingFactor;
 			price = _price;
 			amount = _amount;
 			quality = _quality;
 			name = _name;
 		}
 		
+		public function get productionFactor():int
+		{
+			return _productionFactor;
+		}
+
+		public function get consumingFactor():int
+		{
+			return _consumingFactor;
+		}
+
 		public function addGoods(_amount:int): void
 		{
 			if(_amount > 0)

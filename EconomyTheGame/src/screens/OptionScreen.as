@@ -3,10 +3,12 @@ package screens
 	import flash.events.MouseEvent;
 	
 	import ui_objects.Button;
+	import ui_objects.Slider;
 
 	public class OptionScreen extends Screen
 	{
 		private var closeBtn:Button;
+		private var volumeSlide:Slider;
 		
 		public function OptionScreen()
 		{
@@ -25,12 +27,17 @@ package screens
 			closeBtn.x = Assets.gameStage.stageWidth/2 + 150;
 			closeBtn.y = Assets.gameStage.stageHeight/2 - 180;
 			closeBtn.addEventListener(MouseEvent.CLICK, close);
+			
+			volumeSlide = new Slider();
+			volumeSlide.x = Assets.gameStage.stageWidth/2 -volumeSlide.width/2;
+			volumeSlide.y = Assets.gameStage.stageHeight/2;
 		}
 		
 		private function draw():void
 		{
 			this.addChild(image);
 			this.addChild(closeBtn);
+			this.addChild(volumeSlide);
 		}
 		
 		private function close(evt:MouseEvent):void
