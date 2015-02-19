@@ -188,7 +188,7 @@ package
 			Jeweller = 				new Industry(10, "Jeweller", 			new Vector.<TradeGood>([Jewelry]), null, 1);
 			Potterer = 				new Industry(10, "Potterer", 			new Vector.<TradeGood>([Pottery]), null, 1);
 			WoodCutter = 			new Industry(10, "WoodCutter", 			new Vector.<TradeGood>([Wood]), null, 1);
-			ClothesProduction = 	new Industry(10, "WoodCutter", 			new Vector.<TradeGood>([Clothes]), new Vector.<TradeGood>([Wool]), 1);
+			ClothesProduction = 	new Industry(10, "ClothesProduction", 	new Vector.<TradeGood>([Clothes]), new Vector.<TradeGood>([Wool]), 1);
 			/**********************************/
 		}
 		
