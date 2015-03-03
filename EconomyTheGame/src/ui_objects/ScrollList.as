@@ -253,5 +253,23 @@ package ui_objects
 			
 			return _item;
 		}
+		
+		public function clearList():void
+		{
+			for(var i:int = itemList.length-1; i >= 0; i--)
+			{
+				if(itemList[i] != null)
+				{
+					if(this.contains(itemList[i]))
+					{
+						this.removeChild(itemList[i]);
+						itemList[i] = null;
+					}
+				}
+			}
+			
+			itemList = new Array();
+			itemAverageLength = calcItemAverageLength();
+		}
 	}
 }

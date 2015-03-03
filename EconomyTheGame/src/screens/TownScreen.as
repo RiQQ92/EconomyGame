@@ -56,43 +56,58 @@ package screens
 		
 		protected function openMarketTab(event:MouseEvent):void
 		{
-			if(!this.contains(currentTab))
+			if(!(currentTab is MarketTab))
 			{
-				this.removeChild(currentTab);
-				currentTab = null;
+				if(currentTab != null)
+				{
+					if(this.contains(currentTab))
+					{
+						this.removeChild(currentTab);
+						currentTab = null;
+						currentTab = new MarketTab();
+					}
+				}
+				
 				currentTab = new MarketTab();
-			}
-			else
-			{
-				currentTab = new MarketTab();
+				this.addChild(currentTab);
 			}
 		}
 		
 		protected function openIndustriesTab(event:MouseEvent):void
 		{
-			if(!this.contains(currentTab))
+			if(!(currentTab is IndustriesTab))
 			{
-				this.removeChild(currentTab);
-				currentTab = null;
+				if(currentTab != null)
+				{
+					if(this.contains(currentTab))
+					{
+						this.removeChild(currentTab);
+						currentTab = null;
+						currentTab = new IndustriesTab();
+					}
+				}
+				
 				currentTab = new IndustriesTab();
-			}
-			else
-			{
-				currentTab = new IndustriesTab();
+				this.addChild(currentTab);
 			}
 		}
 		
 		protected function openStatisticsTab(event:MouseEvent):void
 		{
-			if(!this.contains(currentTab))
+			if(!(currentTab is StatisticsTab))
 			{
-				this.removeChild(currentTab);
-				currentTab = null;
+				if(currentTab != null)
+				{
+					if(this.contains(currentTab))
+					{
+						this.removeChild(currentTab);
+						currentTab = null;
+						currentTab = new StatisticsTab();
+					}
+				}
+				
 				currentTab = new StatisticsTab();
-			}
-			else
-			{
-				currentTab = new StatisticsTab();
+				this.addChild(currentTab);
 			}
 		}
 		

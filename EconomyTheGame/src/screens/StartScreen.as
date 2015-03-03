@@ -74,7 +74,7 @@ package screens
 			this.addChild(optionsBtn);
 			this.addChild(creditsBtn);
 			
-			test = new ScrollList(370, 200, false);
+			test = new ScrollList(370, 200, true);
 			test.x = 100;
 			test.y = 100;
 			test.addItem(t1);
@@ -86,6 +86,7 @@ package screens
 			test.addItem(t7);
 			test.addItem(t8);
 			this.addChild(test);
+			test.clearList();
 		}
 		
 		private function removeListeners():void
