@@ -12,6 +12,8 @@ package screens
 
 	public class TownScreen extends Screen
 	{
+		public var town:Town;
+		
 		private var marketTabBtn:Button;
 		private var industriesTabBtn:Button;
 		private var statisticsTabBtn:Button;
@@ -23,6 +25,8 @@ package screens
 		public function TownScreen(_town:Town)
 		{
 			super();
+			
+			town = _town;
 			
 			initialize();
 			draw();
@@ -77,18 +81,21 @@ package screens
 		{
 			if(!(currentTab is IndustriesTab))
 			{
+				var found:Boolean = false;
 				if(currentTab != null)
 				{
 					if(this.contains(currentTab))
 					{
 						this.removeChild(currentTab);
 						currentTab = null;
-						currentTab = new IndustriesTab();
+						currentTab = new IndustriesTab(this);
 					}
 				}
-				
-				currentTab = new IndustriesTab();
-				this.addChild(currentTab);
+				if(!found)
+				{
+					currentTab = new IndustriesTab(this);
+					this.addChild(currentTab);
+				}
 			}
 		}
 		
@@ -118,6 +125,11 @@ package screens
 			this.addChild(industriesTabBtn);
 			this.addChild(statisticsTabBtn);
 			this.addChild(exitBtn);
+		}
+		
+		public function clearTab():void
+		{
+			currentTab = null;
 		}
 		
 		private function close(event:MouseEvent):void

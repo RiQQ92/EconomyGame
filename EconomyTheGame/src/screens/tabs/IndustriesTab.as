@@ -2,12 +2,17 @@ package screens.tabs
 {
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
-	import flash.text.TextFieldAutoSize;
+	
+	import screens.TownScreen;
 	
 	import ui_objects.Button;
+	import ui_objects.IndustryMenuObject;
 	import ui_objects.ScrollList;
+	
+	import world_objects.Town;
 
 	public class IndustriesTab extends Tab
 	{
@@ -24,11 +29,15 @@ package screens.tabs
 		private var industries:TextField;
 		private var font:TextFormat;
 		
+		private var parentObj:TownScreen;
+		
 		private var industryList:ScrollList;
 		
-		public function IndustriesTab()
+		public function IndustriesTab(_parent:TownScreen)
 		{
 			super();
+			
+			parentObj = _parent;
 			
 			font = new TextFormat();
 			font.size = 30;
@@ -49,29 +58,33 @@ package screens.tabs
 			
 			if(whichIndustry == "town")
 			{
-				
+				for(var i:int = 0; i < parentObj.town.industries.length; i++)
+				{
+					var obj:IndustryMenuObject = new IndustryMenuObject(parentObj.town.industries[i]);
+					industryList.addItem(obj);
+				}
 			}
 			else if(whichIndustry == "your")
 			{
-				
+				trace("Your");
 			}
 			else
 			{
-				
+				trace(whichIndustry);
 			}
 		}
 		
 		private function initialize():void
 		{
-			whichIndustry = "";
+			whichIndustry = "town";
 			
-			yourIndustries = new Button();
-			townIndustries = new Button();
-			newIndustries = new Button();
+			yourIndustries = new Button("YourIndustriesTab");
+			townIndustries = new Button("TownIndustriesTab");
+			newIndustries = new Button("NewIndustriesTab");
 			
-			create = new Button();
-			inspect = new Button();
-			buy = new Button();
+			create = new Button("CreateIndustryBtn");
+			inspect = new Button("InspectIndustryBtn");
+			buy = new Button("BuyIndustryBtn");
 			
 			industryList = new ScrollList(590, 400);
 			
@@ -86,39 +99,64 @@ package screens.tabs
 			industries.border = true;
 			industries.background = true;
 			industries.backgroundColor = 0xEC9035;
-			industries.text = "Available Industries";
+			industries.text = "Towns Industries";
 			
 			industryList.x = (Assets.gameStage.stageWidth -190)/2 -industryList.width/2;
 			industryList.y = (Assets.gameStage.stageHeight -200)/2 +200 -industryList.height/2;
-		}
-		
-		protected function changeList(event:MouseEvent):void
-		{
-			if(event.target == yourIndustries)
-			{
-				whichIndustry = "your";
-				industries.text = "Your Industries";
-				// activate inspect button, deactivate others
-			}
-			else if(event.target == townIndustries)
-			{
-				whichIndustry = "town";
-				industries.text = "Towns Industries";
-				// activate buy button, deactivate others
-			}
-			else
-			{
-				whichIndustry = "new";
-				industries.text = "Available Industries";
-				// activate create button, deactivate others
-			}
+			
+			townIndustries.x = industryList.x;
+			townIndustries.y = industryList.y - townIndustries.height;
+			
+			yourIndustries.x = townIndustries.x +townIndustries.width -13;
+			yourIndustries.y = townIndustries.y;
+			
+			newIndustries.x = yourIndustries.x +yourIndustries.width -13;
+			newIndustries.y = yourIndustries.y;
+			
+			create.x = closeBtn.x;
+			create.y = closeBtn.y -23 -create.height;
+			
+			inspect.x = create.x;
+			inspect.y = create.y -23 -inspect.height;
+			
+			buy.x = inspect.x;
+			buy.y = inspect.y -23 -buy.height;
+			
+			destructFunc = this.destruct;
 			
 			addIndustriesToList();
 		}
 		
+		protected function changeList(event:MouseEvent):void
+		{
+			if(event.target == yourIndustries && whichIndustry != "your")
+			{
+				whichIndustry = "your";
+				industries.text = "Your Industries";
+				
+				addIndustriesToList();
+				// activate inspect button, deactivate others
+			}
+			else if(event.target == townIndustries && whichIndustry != "town")
+			{
+				whichIndustry = "town";
+				industries.text = "Towns Industries";
+				
+				addIndustriesToList();
+				// activate buy button, deactivate others
+			}
+			else if(event.target == newIndustries && whichIndustry != "new")
+			{
+				whichIndustry = "new";
+				industries.text = "Available Industries";
+				
+				addIndustriesToList();
+				// activate create button, deactivate others
+			}
+		}
+		
 		private function draw():void
 		{
-			
 			this.addChild(yourIndustries);
 			this.addChild(townIndustries);
 			this.addChild(newIndustries);
@@ -129,6 +167,49 @@ package screens.tabs
 			
 			this.addChild(industryList);
 			this.addChild(industries);
+		}
+		
+		private function removeListeners():void
+		{
+			yourIndustries.removeEventListener(MouseEvent.CLICK, changeList);
+			townIndustries.removeEventListener(MouseEvent.CLICK, changeList);
+			newIndustries.removeEventListener(MouseEvent.CLICK, changeList);
+		}
+		
+		override public function destruct():void
+		{
+			removeListeners();
+			
+			this.removeChild(yourIndustries);
+			yourIndustries.destruct();
+			this.removeChild(townIndustries);
+			townIndustries.destruct();
+			this.removeChild(newIndustries);
+			newIndustries.destruct();
+			
+			this.removeChild(create);
+			create.destruct();
+			this.removeChild(inspect);
+			inspect.destruct();
+			this.removeChild(buy);
+			buy.destruct();
+			
+			industryList.clearList();
+			this.removeChild(industryList);
+			this.removeChild(industries);
+			
+			industryList = null;
+			industries = null;
+			
+			super.destruct();
+			
+			parentObj.clearTab();
+			
+			font = null;
+			parentObj = null;
+			
+			if(this.parent != null)
+				this.parent.removeChild(this);
 		}
 	}
 }

@@ -244,7 +244,7 @@ package ui_objects
 			
 			itemList.push(_item);
 			itemAverageLength = calcItemAverageLength();
-			//setAllItemsPos();
+			setAllItemsPos();
 		}
 		
 		public function removeItem(_index:int):*
@@ -256,6 +256,11 @@ package ui_objects
 		
 		public function clearList():void
 		{
+			if(isVertical)
+				slide.y = 0;
+			else
+				slide.x = 0;
+			
 			for(var i:int = itemList.length-1; i >= 0; i--)
 			{
 				if(itemList[i] != null)
@@ -270,6 +275,7 @@ package ui_objects
 			
 			itemList = new Array();
 			itemAverageLength = calcItemAverageLength();
+			setAllItemsPos();
 		}
 	}
 }

@@ -24,8 +24,8 @@ package world_objects
 		private var sign:TextField = new TextField();
 		private var bigPicture:Bitmap;
 		
-		private var industries:Vector.<Industry>; //Industry[]
-		private var tradeGoods:Vector.<TradeGood>; //TradeGood[]
+		private var _industries:Vector.<Industry>; //Industry[]
+		private var _tradeGoods:Vector.<TradeGood>; //TradeGood[]
 		
 		//private var stats: Statistics
 		
@@ -68,6 +68,16 @@ package world_objects
 			draw();
 		}
 		
+		public function get tradeGoods():Vector.<TradeGood>
+		{
+			return _tradeGoods;
+		}
+
+		public function get industries():Vector.<Industry>
+		{
+			return _industries;
+		}
+
 		private function initialize():void
 		{
 			sign.selectable = false;
@@ -79,6 +89,20 @@ package world_objects
 			sign.border = true;
 			sign.background = true;
 			sign.backgroundColor = 0xEC9035;
+			
+			assignIndustries();
+		}
+		
+		private function assignIndustries():void
+		{
+			_industries = new Vector.<Industry>();
+			_industries.push(Assets.Bakery.clone());
+			_industries.push(Assets.ClothesProduction.clone());
+			_industries.push(Assets.ForagePlantation.clone());
+			_industries.push(Assets.WoodCutter.clone());
+			trace(_industries);
+			trace(_industries.length);
+			trace(Assets.Bakery.clone().industryName);
 		}
 		
 		private function draw():void

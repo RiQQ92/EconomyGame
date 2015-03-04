@@ -16,17 +16,6 @@ package screens
 		private var optionsBtn:Button = new Button("OptionsMenuBtn");
 		private var creditsBtn:Button = new Button("CreditsMenuBtn");
 		
-		private var t1:Button = new Button("NewMenuBtn");
-		private var t2:Button = new Button("NewMenuBtn");
-		private var t3:Button = new Button("NewMenuBtn");
-		private var t4:Button = new Button("NewMenuBtn");
-		private var t5:Button = new Button("NewMenuBtn");
-		private var t6:Button = new Button("NewMenuBtn");
-		private var t7:Button = new Button("NewMenuBtn");
-		private var t8:Button = new Button("NewMenuBtn");
-		
-		private var test:ScrollList;
-		
 		public function StartScreen()
 		{
 			super();
@@ -73,20 +62,6 @@ package screens
 			this.addChild(loadBtn);
 			this.addChild(optionsBtn);
 			this.addChild(creditsBtn);
-			
-			test = new ScrollList(370, 200, true);
-			test.x = 100;
-			test.y = 100;
-			test.addItem(t1);
-			test.addItem(t2);
-			test.addItem(t3);
-			test.addItem(t4);
-			test.addItem(t5);
-			test.addItem(t6);
-			test.addItem(t7);
-			test.addItem(t8);
-			this.addChild(test);
-			test.clearList();
 		}
 		
 		private function removeListeners():void

@@ -97,6 +97,47 @@ package
 		public static const VCAM_zone:Class;
 		/**********************************/
 		
+		/*** Industry ***/
+		/**********************************/
+		[Embed(source = "../Graphics/Industry/industryMenuBG.png")]
+		public static const IndustryMenuBG:Class;
+		
+		[Embed(source = "../Graphics/Industry/TownIndustriesTab.png")]
+		public static const TownIndustriesTab:Class;
+		[Embed(source = "../Graphics/Industry/YourIndustriesTab.png")]
+		public static const YourIndustriesTab:Class;
+		[Embed(source = "../Graphics/Industry/NewIndustriesTab.png")]
+		public static const NewIndustriesTab:Class;
+		
+		[Embed(source = "../Graphics/Industry/BuyTownBtn.png")]
+		public static const BuyIndustryBtn:Class;
+		[Embed(source = "../Graphics/Industry/InspectTownBtn.png")]
+		public static const InspectIndustryBtn:Class;
+		[Embed(source = "../Graphics/Industry/CreateTownBtn.png")]
+		public static const CreateIndustryBtn:Class;
+		
+		[Embed(source = "../Graphics/Industry/industryBakery.png")]
+		public static const IndustryBakery:Class;
+		[Embed(source = "../Graphics/Industry/industryCattle.png")]
+		public static const IndustryCattleBreeding:Class;
+		[Embed(source = "../Graphics/Industry/industryClothes.png")]
+		public static const IndustryClothesProduction:Class;
+		[Embed(source = "../Graphics/Industry/industryForage.png")]
+		public static const IndustryForagePlantation:Class;
+		[Embed(source = "../Graphics/Industry/industryJeweller.png")]
+		public static const IndustryJeweller:Class;
+		[Embed(source = "../Graphics/Industry/industryPotterer.png")]
+		public static const IndustryPotterer:Class;
+		[Embed(source = "../Graphics/Industry/industryStoneMason.png")]
+		public static const IndustryStoneMason:Class;
+		[Embed(source = "../Graphics/Industry/industryWater.png")]
+		public static const IndustryWaterWell:Class;
+		[Embed(source = "../Graphics/Industry/industryWheat.png")]
+		public static const IndustryWheatPlantation:Class;
+		[Embed(source = "../Graphics/Industry/industryWoodCutter.png")]
+		public static const IndustryWoodCutter:Class;
+		/**********************************/
+		
 		
 		/*** TradeGood Templates ***/
 		/**********************************/
