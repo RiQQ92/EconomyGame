@@ -1,11 +1,15 @@
 package world_objects
 {
 	import flash.display.Bitmap;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
 	public class Map extends WorldObject
 	{
+		private var mouseDown:Boolean = false;
+		private var countFrames:int = 0;
+		
 		private var NW:Bitmap = Assets.getTexture("WorldBG");
 		private var NE:Bitmap = Assets.getTexture("WorldBG");
 		private var SE:Bitmap = Assets.getTexture("WorldBG");
@@ -24,14 +28,44 @@ package world_objects
 			buttonMode = false;
 			initialize();
 			draw();
-			this.addEventListener(MouseEvent.CLICK, getClickPos);
+			this.addEventListener(Event.ENTER_FRAME, update);
+			this.addEventListener(MouseEvent.MOUSE_DOWN, mousePress);
+			Assets.gameStage.addEventListener(MouseEvent.MOUSE_UP, mouseRelease);
 		}
 		
-		protected function getClickPos(event:MouseEvent):void
+		private function update(event:Event):void
 		{
+			if(mouseDown)
+			{
+				if(countFrames >= 15)
+				{
+					target.x = this.mouseX +this.x;
+					target.y = this.mouseY +this.y;
+					player.giveTargetPos(target.x, target.y);
+					countFrames = 0;
+				}
+				countFrames++;
+			}
+		}
+		
+		private function mousePress(event:MouseEvent):void
+		{
+			mouseDown = true;
 			target.x = this.mouseX +this.x;
 			target.y = this.mouseY +this.y;
 			player.giveTargetPos(target.x, target.y);
+		}
+		
+		private function mouseRelease(event:MouseEvent):void
+		{
+			mouseDown = false;
+			countFrames = 0;
+		}
+		
+		public function stopAutoPress():void
+		{
+			mouseDown = false;
+			countFrames = 0;
 		}
 		
 		public function swapToLeft():void

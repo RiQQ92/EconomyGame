@@ -28,10 +28,13 @@ package ui_objects
 		private var scrollBarEdge:Shape;
 		private var innerBorder:Shape;
 		private var outerBorder:Shape;
+		private var itemHighlight:Shape;
 		
 		private var slide:Button;
 		
 		private var itemList:Array;
+		
+		public var selectedTarget:* = null;
 		
 		public function ScrollList(_width:int = 50, _height:int = 150, _isVertical:Boolean = true)
 		{
@@ -88,6 +91,9 @@ package ui_objects
 			itemMask.graphics.beginFill(0x000000, 1.0);
 			itemMask.graphics.drawRect(0, 0, scrollListWidth, scrollListHeight);
 			
+			itemHighlight = new Shape();
+			itemHighlight.mask = itemMask;
+			
 			itemList = new Array();
 			slide = new Button("SlidePull");
 			
@@ -99,7 +105,28 @@ package ui_objects
 			slide.addEventListener(MouseEvent.MOUSE_DOWN, drag);
 			slide.addEventListener(Event.ENTER_FRAME, update);
 			this.addEventListener(MouseEvent.MOUSE_WHEEL, scroll);
+			this.addEventListener(MouseEvent.MOUSE_DOWN, removeSelection);
 			Assets.gameStage.addEventListener(MouseEvent.MOUSE_UP, drop);
+		}
+		
+		protected function removeSelection(event:MouseEvent):void
+		{
+			if(isVertical)
+			{
+				if(this.mouseX < scrollListWidth -slide.width)
+				{
+					selectedTarget = null;
+					itemHighlight.graphics.clear();
+				}
+			}
+			else
+			{
+				if(this.mouseY < scrollListHeight -slide.height)
+				{
+					selectedTarget = null;
+					itemHighlight.graphics.clear();
+				}
+			}
 		}
 		
 		private function draw():void
@@ -108,6 +135,7 @@ package ui_objects
 			this.addChild(innerBorder);
 			this.addChild(bg);
 			this.addChild(itemMask);
+			this.addChild(itemHighlight);
 			this.addChild(scrollBar);
 			this.addChild(scrollBarEdge);
 			this.addChild(slide);
@@ -124,6 +152,24 @@ package ui_objects
 		private function drop(event:MouseEvent):void
 		{
 			slide.stopDrag();
+		}
+		
+		private function setHighlighted(event:MouseEvent):void
+		{
+			itemHighlight.graphics.clear();
+			itemHighlight.graphics.beginFill(0xEAA500, 1.0);
+			itemHighlight.graphics.drawRect(event.target.x -5, event.target.y -5, event.target.width+10, event.target.height+10);
+			selectedTarget = event.target;
+		}
+		
+		private function updateHighlightPos():void
+		{
+			if(selectedTarget != null)
+			{
+				itemHighlight.graphics.clear();
+				itemHighlight.graphics.beginFill(0xEAA500, 1.0);
+				itemHighlight.graphics.drawRect(selectedTarget.x -5, selectedTarget.y -5, selectedTarget.width+10, selectedTarget.height+10);
+			}
 		}
 		
 		private function scroll(event:MouseEvent):void
@@ -209,6 +255,7 @@ package ui_objects
 				else
 					itemList[i].x = (itemAverageLength +itemGap)*i -listPos;
 			}
+			updateHighlightPos();
 		}
 		
 		private function calcItemAverageLength():int
@@ -231,6 +278,8 @@ package ui_objects
 		public function addItem(_item:*):void
 		{
 			this.addChild(_item);
+			
+			_item.addEventListener(MouseEvent.CLICK, setHighlighted);
 			
 			var _temp:Shape = new Shape();
 			_temp.graphics.copyFrom(itemMask.graphics);
@@ -260,6 +309,9 @@ package ui_objects
 				slide.y = 0;
 			else
 				slide.x = 0;
+			
+			selectedTarget = null;
+			itemHighlight.graphics.clear();
 			
 			for(var i:int = itemList.length-1; i >= 0; i--)
 			{

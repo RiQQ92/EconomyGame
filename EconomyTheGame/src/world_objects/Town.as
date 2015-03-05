@@ -100,9 +100,6 @@ package world_objects
 			_industries.push(Assets.ClothesProduction.clone());
 			_industries.push(Assets.ForagePlantation.clone());
 			_industries.push(Assets.WoodCutter.clone());
-			trace(_industries);
-			trace(_industries.length);
-			trace(Assets.Bakery.clone().industryName);
 		}
 		
 		private function draw():void

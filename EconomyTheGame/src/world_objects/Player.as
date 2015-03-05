@@ -21,9 +21,9 @@ package world_objects
 		private var currentTown:Town;
 		private var myStage:Stage;
 		private var cam:VCam;
-		private var creator:*;
+		private var creator:World;
 		
-		public function Player(_creator:*)
+		public function Player(_creator:World)
 		{
 			image = Assets.getTexture("PlayerImage");
 			super();
@@ -69,6 +69,7 @@ package world_objects
 			xySpeed = setVector(dir, _speed);
 			
 			var pointerAnim:Pointer = new Pointer();
+			pointerAnim.mouseEnabled = false;
 			pointerAnim.x = target.x;
 			pointerAnim.y = target.y;
 			creator.addChild(pointerAnim);
@@ -97,6 +98,7 @@ package world_objects
 								currentTown = world.worldObjects[i];
 								giveTargetPos(currentTown.x + currentTown.hitBox.width/2*currentTown.scaleX, currentTown.y + currentTown.hitBox.height/2*currentTown.scaleY);
 								world.openTownScreen(currentTown); // open town screen
+								creator.map.stopAutoPress();
 							}
 							//trace("I'm a town!");
 						}

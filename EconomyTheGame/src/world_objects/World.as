@@ -19,7 +19,7 @@ package world_objects
 		private var townNames:Array;
 		private var usedNames:Array = new Array();
 		
-		private var map:Map;
+		private var _map:Map;
 		
 		public var worldObjects:Array = new Array();
 		
@@ -36,6 +36,11 @@ package world_objects
 			this.addEventListener(Event.ENTER_FRAME, update);
 		}
 		
+		public function get map():Map
+		{
+			return _map;
+		}
+
 		private function allocTownNames():void
 		{
 			townNames = new Array();
@@ -104,37 +109,37 @@ package world_objects
 		private function update(event:Event):void
 		{
 			// swap map pieces to left and right
-			if(player.x +Assets.gameStage.stageWidth/2 >= (map.xSize/2) +(map.xSize*xMultiplier/2))
+			if(player.x +Assets.gameStage.stageWidth/2 >= (_map.xSize/2) +(_map.xSize*xMultiplier/2))
 			{
 				xMultiplier++;
-				map.swapToRight();
+				_map.swapToRight();
 			}
-			else if(player.x -Assets.gameStage.stageWidth/2 < -(map.xSize/2) +(map.xSize*xMultiplier/2))
+			else if(player.x -Assets.gameStage.stageWidth/2 < -(_map.xSize/2) +(_map.xSize*xMultiplier/2))
 			{
 				xMultiplier--;
-				map.swapToLeft();
+				_map.swapToLeft();
 			}
 			
 			// swap map pieces up and down
-			if(player.y +Assets.gameStage.stageHeight/2 >= (map.ySize/2) +(map.ySize*yMultiplier/2))
+			if(player.y +Assets.gameStage.stageHeight/2 >= (_map.ySize/2) +(_map.ySize*yMultiplier/2))
 			{
 				yMultiplier++;
-				map.swapToDown();
+				_map.swapToDown();
 			}
-			else if(player.y -Assets.gameStage.stageHeight/2 < -(map.ySize/2) +(map.ySize*yMultiplier/2))
+			else if(player.y -Assets.gameStage.stageHeight/2 < -(_map.ySize/2) +(_map.ySize*yMultiplier/2))
 			{
 				yMultiplier--;
-				map.swapToUp();
+				_map.swapToUp();
 			}
 		}
 		
 		private function initialize():void
 		{
 			_player = new Player(this);
-			map = new Map();
-			map.x = -map.xSize/2;
-			map.y = -map.ySize/2;
-			this.addChild(map);
+			_map = new Map();
+			_map.x = -_map.xSize/2;
+			_map.y = -_map.ySize/2;
+			this.addChild(_map);
 		}
 		
 		private function draw():void
@@ -161,7 +166,7 @@ package world_objects
 			townNames = new Array();
 			townNames = null;
 			
-			map.destruct();
+			_map.destruct();
 			this.removeChild(map);
 			
 			player.Destruct();

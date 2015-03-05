@@ -12,13 +12,29 @@ package ui_objects
 	public class Button extends Item
 	{
 		private var mouseDown:Boolean = false;
+		private var _active:Boolean = true;
 		//private var sound:Sound = Assets.getSound("Aani_btnclick");
 		
 		private var lightier:ColorTransform = new ColorTransform(1.2,1.2,1.2,1);
 		private var darker:ColorTransform = new ColorTransform(0.8, 0.8, 0.8, 1);
 		private var normal:BitmapData;
-		
+
 		private var clickFunc:Function;
+		
+		public function get active():Boolean
+		{
+			return _active;
+		}
+		
+		public function set active(value:Boolean):void
+		{
+			if(value && !_active)
+				setActive();
+			else if(!value && _active)
+				setInactive();
+			
+			_active = value;
+		}
 		
 		public function Button(imageName:String = "NoImage", highlights:Boolean = true)
 		{
@@ -42,12 +58,12 @@ package ui_objects
 			normal = image.bitmapData.clone();
 		}
 		
-		protected function resetColor(evt:MouseEvent):void
+		private function resetColor(evt:MouseEvent):void
 		{
 			image.bitmapData = normal.clone();
 		}
 		
-		protected function mouseRelease(evt:MouseEvent):void
+		private function mouseRelease(evt:MouseEvent):void
 		{
 			mouseDown = false;
 			image.bitmapData = normal.clone();
@@ -87,7 +103,21 @@ package ui_objects
 			this.addEventListener(MouseEvent.CLICK, clickSound);
 		}
 		
-		protected function clickSound(event:MouseEvent):void
+		private function setActive():void
+		{
+			this.mouseEnabled = true;
+			image.bitmapData = normal.clone();
+			image.alpha = 1;
+		}
+		
+		private function setInactive():void
+		{
+			this.mouseEnabled = false;
+			image.bitmapData = normal.clone();
+			image.alpha = 0.75;
+		}
+		
+		private function clickSound(event:MouseEvent):void
 		{
 			//sound.play();
 		}

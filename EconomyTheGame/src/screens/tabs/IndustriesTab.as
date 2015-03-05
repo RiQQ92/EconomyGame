@@ -83,8 +83,11 @@ package screens.tabs
 			newIndustries = new Button("NewIndustriesTab");
 			
 			create = new Button("CreateIndustryBtn");
+			create.active = false;
 			inspect = new Button("InspectIndustryBtn");
+			inspect.active = false;
 			buy = new Button("BuyIndustryBtn");
+			buy.active = false;
 			
 			industryList = new ScrollList(590, 400);
 			
@@ -103,6 +106,7 @@ package screens.tabs
 			
 			industryList.x = (Assets.gameStage.stageWidth -190)/2 -industryList.width/2;
 			industryList.y = (Assets.gameStage.stageHeight -200)/2 +200 -industryList.height/2;
+			industryList.addEventListener(MouseEvent.CLICK, checkSelection);
 			
 			townIndustries.x = industryList.x;
 			townIndustries.y = industryList.y - townIndustries.height;
@@ -127,15 +131,46 @@ package screens.tabs
 			addIndustriesToList();
 		}
 		
+		protected function checkSelection(event:MouseEvent):void
+		{
+			if(whichIndustry == "town" && industryList.selectedTarget != null)
+			{
+				create.active = false;
+				inspect.active = false;
+				buy.active = true;
+			}
+			else if(whichIndustry == "your" && industryList.selectedTarget != null)
+			{
+				create.active = false;
+				inspect.active = true;
+				buy.active = false;
+			}
+			else if(whichIndustry == "new" && industryList.selectedTarget != null)
+			{
+				create.active = true;
+				inspect.active = false;
+				buy.active = false;
+			}
+			else
+			{
+				create.active = false;
+				inspect.active = false;
+				buy.active = false;
+			}
+		}
+		
 		protected function changeList(event:MouseEvent):void
 		{
+			create.active = false;
+			inspect.active = false;
+			buy.active = false;
+			
 			if(event.target == yourIndustries && whichIndustry != "your")
 			{
 				whichIndustry = "your";
 				industries.text = "Your Industries";
 				
 				addIndustriesToList();
-				// activate inspect button, deactivate others
 			}
 			else if(event.target == townIndustries && whichIndustry != "town")
 			{
@@ -143,7 +178,6 @@ package screens.tabs
 				industries.text = "Towns Industries";
 				
 				addIndustriesToList();
-				// activate buy button, deactivate others
 			}
 			else if(event.target == newIndustries && whichIndustry != "new")
 			{
@@ -151,7 +185,6 @@ package screens.tabs
 				industries.text = "Available Industries";
 				
 				addIndustriesToList();
-				// activate create button, deactivate others
 			}
 		}
 		
