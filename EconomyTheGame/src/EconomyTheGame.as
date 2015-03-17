@@ -16,7 +16,7 @@ package
 			screenHandle = new ScreenHandle(stage);
 			this.addChild(screenHandle);
 			Assets.screenHandle = screenHandle;
-			Assets.initializeGoodsAnIndustries();
+			Assets.initializeAssets();
 			screenHandle.inScreen = "menu";
 		}
 	}

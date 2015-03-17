@@ -2,11 +2,15 @@ package
 {
 	import flash.display.Bitmap;
 	import flash.display.Stage;
+	import flash.events.Event;
 	import flash.media.Sound;
 	import flash.utils.Dictionary;
 	
 	import game_objects.Industry;
 	import game_objects.TradeGood;
+	
+	import my.events.DayChange;
+	import my.events.MyEvents;
 	
 	import utility.ScreenHandle;
 	
@@ -183,9 +187,11 @@ package
 		public static var worldObjCounter:int;
 		
 		public static var gamePaused:Boolean;
+		public static var gameSpeed:int;
 		public static var gameStage:Stage;
 		public static var gameWorld:World;
 		
+		public static var changeDay:DayChange;
 		public static var screenHandle:ScreenHandle;
 		/**********************************/
 		
@@ -194,7 +200,25 @@ package
 		
 		private static var gameTextures:Dictionary = new Dictionary();
 		
-		public static function initializeGoodsAnIndustries():void
+		public static function initializeAssets():void
+		{
+			initializeGoodsAnIndustries();
+			
+			gameSpeed = 1; // 1, 2, 4;
+			changeDay = new DayChange();
+		}
+		
+		public static function startDayProgress():void
+		{
+			changeDay.continueProgress();
+		}
+		
+		public static function stopDayProgress():void
+		{
+			changeDay.stopProgress();
+		}
+		
+		private static function initializeGoodsAnIndustries():void
 		{
 			/*** TradeGood Templates ***/
 			/**********************************/

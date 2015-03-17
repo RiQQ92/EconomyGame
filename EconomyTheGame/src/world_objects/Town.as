@@ -1,6 +1,7 @@
 package world_objects
 {
 	import flash.display.Bitmap;
+	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
@@ -8,6 +9,8 @@ package world_objects
 	
 	import game_objects.Industry;
 	import game_objects.TradeGood;
+	
+	import my.events.MyEvents;
 
 	public class Town extends WorldObject
 	{
@@ -66,6 +69,8 @@ package world_objects
 			
 			initialize();
 			draw();
+			
+			Assets.changeDay.addEventListener(MyEvents.DAY_CHANGE, collectTaxes);
 		}
 		
 		public function get tradeGoods():Vector.<TradeGood>
@@ -100,6 +105,19 @@ package world_objects
 			_industries.push(Assets.ClothesProduction.clone());
 			_industries.push(Assets.ForagePlantation.clone());
 			_industries.push(Assets.WoodCutter.clone());
+			
+			if(title == titles[0])
+			{
+				// focus on postProduction
+			}
+			else if(title == titles[1])
+			{
+				// have some rawmaterial production and postproduction for these
+			}
+			else
+			{
+				// focus on Rawmaterial Production
+			}
 		}
 		
 		private function draw():void
@@ -108,8 +126,9 @@ package world_objects
 			this.addChild(sign);
 		}
 		
-		private function collectTaxes(): int
+		private function collectTaxes(evt:Event): int
 		{
+			trace(_worldObjName+" noticed day change and collecting taxes now!");
 			return 1;
 		}
 		

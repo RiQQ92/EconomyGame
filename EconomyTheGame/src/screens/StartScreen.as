@@ -47,6 +47,7 @@ package screens
 		protected function startNew(event:MouseEvent):void
 		{
 			changeScreen("world");
+			Assets.startDayProgress();
 		}
 		
 		private function openOptions(event:MouseEvent):void

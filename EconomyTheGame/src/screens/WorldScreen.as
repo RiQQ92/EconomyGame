@@ -60,7 +60,8 @@ package screens
 		
 		private function goToMenu():void
 		{
-			Assets.gamePaused = false;
+			Assets.changeDay.stopProgress();
+			Assets.gamePaused = true;
 			changeScreen("menu");
 		}
 		
