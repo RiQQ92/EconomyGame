@@ -17,15 +17,16 @@ package game_objects
 		
 		public function TradeGood(_price:int, _amount:int, _name:String, productionFactor:int, comsumingFactor:int, _quality:Number = 0.5)
 		{
-			//super();
-			/*
+			name = _name;
+			image = Assets.getTexture("TradeGood"+name);
+			
+			super();
+			
 			_productionFactor = productionFactor;
 			_consumingFactor = comsumingFactor;
 			price = _price;
 			amount = _amount;
 			quality = _quality;
-			name = _name;
-			*/
 		}
 		
 		public function get productionFactor():int

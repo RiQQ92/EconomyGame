@@ -142,6 +142,34 @@ package
 		public static const IndustryWoodCutter:Class;
 		/**********************************/
 		
+		/*** TradeGood ***/
+		/**********************************/
+		[Embed(source = "../Graphics/TradeGood/TradeGoodBread.png")]
+		public static const TradeGoodBread:Class;
+		[Embed(source = "../Graphics/TradeGood/TradeGoodMilk.png")]
+		public static const TradeGoodMilk:Class;
+		[Embed(source = "../Graphics/TradeGood/TradeGoodWool.png")]
+		public static const TradeGoodWool:Class;
+		[Embed(source = "../Graphics/TradeGood/TradeGoodMeat.png")]
+		public static const TradeGoodMeat:Class;
+		[Embed(source = "../Graphics/TradeGood/TradeGoodClothes.png")]
+		public static const TradeGoodClothes:Class;
+		[Embed(source = "../Graphics/TradeGood/TradeGoodForage.png")]
+		public static const TradeGoodForage:Class;
+		[Embed(source = "../Graphics/TradeGood/TradeGoodJewelry.png")]
+		public static const TradeGoodJewelry:Class;
+		[Embed(source = "../Graphics/TradeGood/TradeGoodPottery.png")]
+		public static const TradeGoodPottery:Class;
+		[Embed(source = "../Graphics/TradeGood/TradeGoodStone.png")]
+		public static const TradeGoodStone:Class;
+		[Embed(source = "../Graphics/TradeGood/TradeGoodWater.png")]
+		public static const TradeGoodWater:Class;
+		[Embed(source = "../Graphics/TradeGood/TradeGoodWheat.png")]
+		public static const TradeGoodWheat:Class;
+		[Embed(source = "../Graphics/TradeGood/TradeGoodWood.png")]
+		public static const TradeGoodWood:Class;
+		/**********************************/
+		
 		
 		/*** TradeGood Templates ***/
 		/**********************************/

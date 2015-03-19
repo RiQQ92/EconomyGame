@@ -68,11 +68,11 @@ package screens
 					{
 						this.removeChild(currentTab);
 						currentTab = null;
-						currentTab = new MarketTab();
+						currentTab = new MarketTab(this);
 					}
 				}
 				
-				currentTab = new MarketTab();
+				currentTab = new MarketTab(this);
 				this.addChild(currentTab);
 			}
 		}
