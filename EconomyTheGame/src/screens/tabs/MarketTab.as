@@ -1,8 +1,11 @@
 package screens.tabs
 {
-	import ui_objects.Button;
+	import game_objects.TradeGood;
+	
 	import screens.TownScreen;
-	import ui_objects.ScrollList
+	
+	import ui_objects.Button;
+	import ui_objects.ScrollList;
 
 	public class MarketTab extends Tab
 	{
@@ -10,7 +13,9 @@ package screens.tabs
 		
 		private var parentObj:TownScreen;
 		
-		private var tradegoodList:ScrollList;
+		private var townsTradegoodList:ScrollList;
+		private var playersTradegoodList:ScrollList;
+		private var tradingTradegoodList:ScrollList;
 		
 		public function MarketTab(_parent:TownScreen)
 		{
@@ -24,8 +29,17 @@ package screens.tabs
 		
 		private function initialize():void
 		{
-			tradegoodList = new ScrollList(590, 400);
+			tradingTradegoodList = new ScrollList(200, 400, true, true, true, playersTradegoodList);
+			tradingTradegoodList.x = (Assets.gameStage.stageWidth -190)/2 -tradingTradegoodList.width/2;
+			tradingTradegoodList.y = (Assets.gameStage.stageHeight -200)/2 +200 -tradingTradegoodList.height/2;
 			
+			playersTradegoodList = new ScrollList(200, 400, true, true, false, tradingTradegoodList);
+			playersTradegoodList.x = (Assets.gameStage.stageWidth -190)/2 -200 -playersTradegoodList.width/2;
+			playersTradegoodList.y = (Assets.gameStage.stageHeight -200)/2 +200 -playersTradegoodList.height/2;
+			
+			townsTradegoodList = new ScrollList(200, 400, true, true, false, tradingTradegoodList);
+			townsTradegoodList.x = (Assets.gameStage.stageWidth -190)/2 +200 -townsTradegoodList.width/2;
+			townsTradegoodList.y = (Assets.gameStage.stageHeight -200)/2 +200 -townsTradegoodList.height/2;
 			
 			destructFunc = this.destruct;
 			
@@ -34,20 +48,22 @@ package screens.tabs
 		
 		private function draw():void
 		{
-			
+			this.addChild(townsTradegoodList);
+			this.addChild(playersTradegoodList);
+			this.addChild(tradingTradegoodList);
 		}
 		
 		private function addTradegoodsToList():void
 		{
-			tradegoodList.clearList();
-			
-			
-			for(var i:int = 0; i < parentObj.town.industries.length; i++)
+			// add towns tradegoods to buy option list
+			townsTradegoodList.clearList();
+			for(var i:int = 0; i < parentObj.town.tradeGoods.length; i++)
 			{
-				// var obj:IndustryMenuObject = new IndustryMenuObject(parentObj.town.industries[i]);
-				// industryList.addItem(obj);
-				;
+				var obj:TradeGood = parentObj.town.tradeGoods[i];
+				townsTradegoodList.addItem(obj);
 			}
+			
+			// add players tradegoods to sell option list
 		}
 	}
 }

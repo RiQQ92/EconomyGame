@@ -1,11 +1,12 @@
 package ui_objects
 {
+	import flash.events.Event;
 	import flash.events.FullScreenEvent;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
-	import flash.text.TextFieldAutoSize;
 
 	public class QuestionWindow extends Item
 	{
@@ -92,7 +93,7 @@ package ui_objects
 			this.addChild(no);
 		}
 		
-		override public function destruct():void
+		override public function destruct(evt:Event = null):void
 		{
 			no.removeEventListener(MouseEvent.CLICK, answNo);
 			yes.removeEventListener(MouseEvent.CLICK, answYes);

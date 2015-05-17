@@ -2,6 +2,7 @@ package world_objects
 {
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.filters.DisplacementMapFilter;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -43,7 +44,7 @@ package world_objects
 			this.scaleY = scale;
 		}
 		
-		override public function destruct():void
+		override public function destruct(evt:Event = null):void
 		{
 			location = null;
 			world = null;

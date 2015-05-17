@@ -88,7 +88,7 @@ package ui_objects
 			this.addChild(slideText);
 		}
 		
-		override public function destruct():void
+		override public function destruct(evt:Event = null):void
 		{
 			this.removeChild(slide);
 			super.destruct();

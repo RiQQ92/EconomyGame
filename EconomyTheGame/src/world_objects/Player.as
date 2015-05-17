@@ -130,7 +130,7 @@ package world_objects
 			myStage.removeEventListener(Event.ENTER_FRAME, update);
 		}
 		
-		override public function destruct():void
+		override public function destruct(evt:Event = null):void
 		{
 			removeListeners();
 			

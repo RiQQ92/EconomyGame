@@ -89,7 +89,7 @@ package world_objects
 			usedNames.push(rand);
 			var tempName:String = townNames[rand];
 			
-			rand = Math.floor(Math.random()*680+20);
+			rand = Math.floor(Math.random()*650+50);
 			var town:Town = new Town(tempName, rand);
 			
 			return (town);
@@ -158,7 +158,7 @@ package world_objects
 			
 		}
 		
-		override public function destruct():void
+		override public function destruct(evt:Event = null):void
 		{
 			removeListeners();
 			removeTowns();

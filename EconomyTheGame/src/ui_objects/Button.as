@@ -3,6 +3,7 @@ package ui_objects
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.ColorTransform;
 	import flash.media.Sound;
@@ -14,6 +15,7 @@ package ui_objects
 		private var mouseDown:Boolean = false;
 		private var _active:Boolean = true;
 		//private var sound:Sound = Assets.getSound("Aani_btnclick");
+		private var extraData:Array = new Array();
 		
 		private var lightier:ColorTransform = new ColorTransform(1.2,1.2,1.2,1);
 		private var darker:ColorTransform = new ColorTransform(0.8, 0.8, 0.8, 1);
@@ -34,6 +36,23 @@ package ui_objects
 				setInactive();
 			
 			_active = value;
+		}
+		
+		public function setExtraData(variableName:String, variableValue:*):Boolean
+		{
+			if(extraData[variableName] == null)
+			{
+				extraData[variableName] = variableValue;
+				
+				return true;
+			}
+			else
+				return false;
+		}
+		
+		public function getExtraData(variableName:String):*
+		{
+			return extraData[variableName];
 		}
 		
 		public function Button(imageName:String = "NoImage", highlights:Boolean = true)
@@ -134,7 +153,7 @@ package ui_objects
 			Assets.gameStage.removeEventListener(MouseEvent.MOUSE_UP, mouseRelease);
 		}
 		
-		override public function destruct():void
+		override public function destruct(evt:Event = null):void
 		{
 			removeListeners();
 			
@@ -142,6 +161,11 @@ package ui_objects
 			darker = null;
 			normal = null;
 			clickFunc = null;
+			
+			for each(var xtra:* in extraData)
+				xtra = null;
+				
+			extraData = null;
 			super.destruct();
 		}
 	}

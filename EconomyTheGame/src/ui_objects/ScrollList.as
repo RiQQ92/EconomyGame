@@ -11,6 +11,8 @@ package ui_objects
 	public class ScrollList extends Sprite
 	{
 		private var isVertical:Boolean;
+		private var hasItemSwapMenu:Boolean;
+		private var multipleSwapMenus:Boolean;
 		
 		private var scrollListWidth:int;
 		private var scrollListHeight:int;
@@ -32,11 +34,13 @@ package ui_objects
 		
 		private var slide:Button;
 		
+		private var menuToSwapWith:ScrollList;
+		private var swappedItemsList:Array; // has Objects(swappedItem:*, originalOwner:ScrollList)
 		private var itemList:Array;
 		
 		public var selectedTarget:* = null;
 		
-		public function ScrollList(_width:int = 50, _height:int = 150, _isVertical:Boolean = true)
+		public function ScrollList(_width:int = 50, _height:int = 150, _isVertical:Boolean = true, _hasSwapMenus:Boolean = false, _hasMultiSwapMenus:Boolean = false, _swapMenu:ScrollList = null)
 		{
 			super();
 			
@@ -44,12 +48,18 @@ package ui_objects
 			scrollListHeight = _height;
 			isVertical = _isVertical;
 			
+			hasItemSwapMenu = _hasSwapMenus;
+			multipleSwapMenus = _hasMultiSwapMenus;
+			menuToSwapWith = _swapMenu;
+			
 			initialize();
 			draw();
 		}
 		
 		private function initialize():void
 		{
+			swappedItemsList = new Array();
+			
 			outerBorder = new Shape();
 			outerBorder.graphics.beginFill(0x666666, 1.0);
 			outerBorder.graphics.drawRect(-5, -5, scrollListWidth+10, scrollListHeight+10);
@@ -109,7 +119,19 @@ package ui_objects
 			Assets.gameStage.addEventListener(MouseEvent.MOUSE_UP, drop);
 		}
 		
-		protected function removeSelection(event:MouseEvent):void
+		private function draw():void
+		{
+			this.addChild(outerBorder);
+			this.addChild(innerBorder);
+			this.addChild(bg);
+			this.addChild(itemMask);
+			this.addChild(itemHighlight);
+			this.addChild(scrollBar);
+			this.addChild(scrollBarEdge);
+			this.addChild(slide);
+		}
+		
+		private function removeSelection(event:MouseEvent):void
 		{
 			if(isVertical)
 			{
@@ -127,18 +149,6 @@ package ui_objects
 					itemHighlight.graphics.clear();
 				}
 			}
-		}
-		
-		private function draw():void
-		{
-			this.addChild(outerBorder);
-			this.addChild(innerBorder);
-			this.addChild(bg);
-			this.addChild(itemMask);
-			this.addChild(itemHighlight);
-			this.addChild(scrollBar);
-			this.addChild(scrollBarEdge);
-			this.addChild(slide);
 		}
 		
 		private function drag(event:MouseEvent):void
@@ -210,6 +220,54 @@ package ui_objects
 			setAllItemsPos();
 		}
 		
+		private function swapItem(event:MouseEvent):void
+		{
+			trace("SwapItem called!");
+			var _item:* = event.target;
+			if(multipleSwapMenus)
+			{
+				trace("ScrollList has multimenus!");
+				for each(var swappedItem:* in swappedItemsList)
+				{
+					if(swappedItem.swapItem == _item)
+					{
+						removeItemByReference(_item);
+						swappedItem.itemOwner.addItem(_item);
+						break;
+					}
+				}
+			}
+			else
+			{
+				trace("Scroll list doesn't have multimenus!");
+				// else check whether it is own item or not then send it to other ScrollList
+				var found:Boolean = false;
+				for each(var swappedItem2:* in swappedItemsList)
+				{
+					if(swappedItem2.swapItem == _item)
+					{
+						removeItemByReference(_item);
+						swappedItem2.itemOwner.addItem(_item);
+						found = true;
+						break;
+					}
+				}
+				if(!found)
+				{
+					trace("nothing found at swappedItemsList!");
+					for each(var item:* in itemList)
+					{
+						if(item == _item)
+						{
+							removeItemByReference(_item);
+							menuToSwapWith.receiveSwapItem(_item, this);
+							break;
+						}
+					}
+				}
+			}
+		}
+		
 		private function update(event:Event):void
 		{
 			var hasMoved:Boolean = false;
@@ -244,7 +302,7 @@ package ui_objects
 				
 				setAllItemsPos();
 			}
-		}	
+		}
 		
 		private function setAllItemsPos():void
 		{
@@ -275,11 +333,21 @@ package ui_objects
 			return avrLength;
 		}
 		
+		public function receiveSwapItem(item:*, owner:ScrollList):void
+		{
+			var obj:Object = {swapItem:item, itemOwner:owner};
+			swappedItemsList.push(obj);
+			addItem(item);
+		}
+		
 		public function addItem(_item:*):void
 		{
 			this.addChild(_item);
+			_item.doubleClickEnabled = true;
 			
 			_item.addEventListener(MouseEvent.CLICK, setHighlighted);
+			if(hasItemSwapMenu)
+				_item.addEventListener(MouseEvent.DOUBLE_CLICK, swapItem);
 			
 			var _temp:Shape = new Shape();
 			_temp.graphics.copyFrom(itemMask.graphics);
@@ -292,6 +360,55 @@ package ui_objects
 				_item.y = distanceFromEdge;
 			
 			itemList.push(_item);
+			itemAverageLength = calcItemAverageLength();
+			setAllItemsPos();
+		}
+		
+		private function removeItemByReference(_item:*):void
+		{
+			var count:int = 0;
+			if(hasItemSwapMenu)
+			{
+				for each(var swappedItem:* in swappedItemsList)
+				{
+					if(swappedItem.swapItem == _item)
+					{
+						swappedItemsList.splice(count, 1);
+						break;
+					}
+					count++;
+				}
+				count = 0;
+				
+				for(; count < itemList.length; count++)
+				{
+					if(itemList[count] == _item)
+					{
+						itemList.splice(count, 1);
+						_item.removeEventListener(MouseEvent.CLICK, setHighlighted);
+						_item.removeEventListener(MouseEvent.DOUBLE_CLICK, swapItem);
+						_item.mask.parent.removeChild(_item.mask);
+						_item.mask = null;
+						_item.parent.removeChild(_item);
+					}
+				}
+			}
+			else
+			{
+				for(; count < itemList.length; count++)
+				{
+					if(itemList[count] == _item)
+					{
+						itemList.splice(count, 1);
+						_item.removeEventListener(MouseEvent.CLICK, setHighlighted);
+						_item.removeEventListener(MouseEvent.DOUBLE_CLICK, swapItem);
+						_item.mask.parent.removeChild(_item.mask);
+						_item.mask = null;
+						_item.parent.removeChild(_item);
+					}
+				}
+			}
+			
 			itemAverageLength = calcItemAverageLength();
 			setAllItemsPos();
 		}

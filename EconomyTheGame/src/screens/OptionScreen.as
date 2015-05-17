@@ -1,5 +1,6 @@
 package screens
 {
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import ui_objects.Button;
@@ -50,7 +51,7 @@ package screens
 			closeBtn.removeEventListener(MouseEvent.CLICK, close);
 		}
 		
-		override public function destruct():void
+		override public function destruct(evt:Event = null):void
 		{
 			removeListeners();
 			Assets.gamePaused = false;

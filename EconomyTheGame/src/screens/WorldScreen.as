@@ -1,5 +1,6 @@
 package screens
 {
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import ui_objects.Button;
@@ -79,7 +80,7 @@ package screens
 			exit.removeEventListener(MouseEvent.CLICK, exitToMenu);
 		}
 		
-		override public function destruct():void
+		override public function destruct(evt:Event = null):void
 		{
 			removeListeners();
 			

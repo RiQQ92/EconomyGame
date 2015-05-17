@@ -1,6 +1,7 @@
 package screens
 {
 	import flash.display.Bitmap;
+	import flash.events.Event;
 	
 	import ui_objects.Item;
 	
@@ -23,7 +24,7 @@ package screens
 			screenHandle.inScreen = str;
 		}
 		
-		override public function destruct():void
+		override public function destruct(evt:Event = null):void
 		{
 			if(overlay != null)
 				if(this.contains(overlay))

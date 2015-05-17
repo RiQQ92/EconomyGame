@@ -17,20 +17,41 @@ package game_objects
 		
 		private var town:Town;
 		
+		private var _productionFactor:Vector.<int>;
+		private var _consumingFactor:Vector.<int>;
 		private var _productYield:Vector.<TradeGood>;
 		private var _productConsumed:Vector.<TradeGood>;
 		private var _storage:Vector.<TradeGood>;
 		
-		public function Industry(_DefWage:int, _Name:String, _ProductYield:Vector.<TradeGood>, _ProductConsumed:Vector.<TradeGood> = null, _Size:int = 1)
+		public function Industry(_DefWage:int, _Name:String, productionFactor:Vector.<int>, consumingFactor:Vector.<int>, _ProductYield:Vector.<TradeGood>, _ProductConsumed:Vector.<TradeGood> = null, _Size:int = 1)
 		{
 			super();
 			industryName = _Name;
 			logo = Assets.getTexture("Industry"+industryName);
+			
+			_productionFactor = productionFactor;
+			_consumingFactor = consumingFactor;
 			_defWage = _DefWage;
 			_productYield = _ProductYield;
 			_productConsumed = _ProductConsumed;
 			_size = _Size;
 			_upgradeAmount = 0.0;
+		}
+		
+		// called by parenting town object
+		public function setTown(myTown:Town):void
+		{
+			town = myTown;
+		}
+		
+		public function get productionFactor():Vector.<int>
+		{
+			return _productionFactor;
+		}
+		
+		public function get consumingFactor():Vector.<int>
+		{
+			return _consumingFactor;
 		}
 		
 		public function get storage():Vector.<TradeGood>
@@ -73,19 +94,23 @@ package game_objects
 		
 		public function clone():Industry
 		{
-			var i:Industry = new Industry(defWage, industryName, productYield, productConsumed, size);
+			var i:Industry = new Industry(defWage, industryName, _productionFactor, _consumingFactor, _productYield, _productConsumed, size);
 			
 			return i;
 		}
 		
 		private function checkGoods():Boolean
 		{
+			// checks if industry has rawmaterial for production
+			
 			return true;
 		}
 		
-		private function payWages():void
+		private function payWages():Boolean
 		{
+			// checks if industry has money and if does, pays wages to workers
 			
+			return true;
 		}
 		
 		private function produce():void

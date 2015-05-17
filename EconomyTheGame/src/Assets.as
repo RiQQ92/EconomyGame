@@ -4,6 +4,8 @@ package
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.media.Sound;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
 	import flash.utils.Dictionary;
 	
 	import game_objects.Industry;
@@ -99,6 +101,60 @@ package
 		public static const NoImage:Class;
 		[Embed(source = "../Graphics/Utility/VCAM_Zone.png")]
 		public static const VCAM_zone:Class;
+		
+		// Calculator
+		[Embed(source = "../Graphics/Utility/Calculator/BG.png")]
+		public static const CalculatorBG:Class;
+		
+		[Embed(source = "../Graphics/Utility/Calculator/Btn0.png")]
+		public static const Calculator0:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn1.png")]
+		public static const Calculator1:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn2.png")]
+		public static const Calculator2:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn3.png")]
+		public static const Calculator3:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn4.png")]
+		public static const Calculator4:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn5.png")]
+		public static const Calculator5:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn6.png")]
+		public static const Calculator6:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn7.png")]
+		public static const Calculator7:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn8.png")]
+		public static const Calculator8:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn9.png")]
+		public static const Calculator9:Class;
+		
+		[Embed(source = "../Graphics/Utility/Calculator/BtnDel.png")]
+		public static const CalculatorDel:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/BtnX.png")]
+		public static const CalculatorX:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/BtnClear.png")]
+		public static const CalculatorClear:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/BtnMax.png")]
+		public static const CalculatorMax:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/BtnEnter.png")]
+		public static const CalculatorEnter:Class;
+		
+		[Embed(source = "../Graphics/Utility/Calculator/Btn+1.png")]
+		public static const CalculatorPlus1:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn+10.png")]
+		public static const CalculatorPlus10:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn+100.png")]
+		public static const CalculatorPlus100:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn+1000.png")]
+		public static const CalculatorPlus1000:Class;
+		
+		[Embed(source = "../Graphics/Utility/Calculator/Btn-1.png")]
+		public static const CalculatorMinus1:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn-10.png")]
+		public static const CalculatorMinus10:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn-100.png")]
+		public static const CalculatorMinus100:Class;
+		[Embed(source = "../Graphics/Utility/Calculator/Btn-1000.png")]
+		public static const CalculatorMinus1000:Class;
 		/**********************************/
 		
 		/*** Industry ***/
@@ -221,6 +277,14 @@ package
 		
 		public static var changeDay:DayChange;
 		public static var screenHandle:ScreenHandle;
+		
+		public static var fontRed:TextFormat;
+		public static var fontGreen:TextFormat;
+		public static var fontWhite:TextFormat;
+		public static var fontCalc:TextFormat;
+		public static var font:TextFormat;
+		public static var fontTooltip:TextFormat;
+		public static var fontUnderlined:TextFormat;
 		/**********************************/
 		
 		
@@ -230,7 +294,61 @@ package
 		
 		public static function initializeAssets():void
 		{
-			initializeGoodsAnIndustries();
+			//// DEFINE FONTS ////
+			
+			fontRed = new TextFormat();
+			fontRed.size = 30;
+			fontRed.font = "Algerian";
+			fontRed.leftMargin = 2;
+			fontRed.rightMargin = 2;
+			fontRed.color = 0xFF0000;
+			fontRed.align = TextFormatAlign.LEFT;
+			
+			fontGreen = new TextFormat();
+			fontGreen.size = 30;
+			fontGreen.font = "Algerian";
+			fontGreen.leftMargin = 2;
+			fontGreen.rightMargin = 2;
+			fontGreen.color = 0x00FF00;
+			fontGreen.align = TextFormatAlign.LEFT;
+			
+			fontWhite = new TextFormat();
+			fontWhite.size = 30;
+			fontWhite.font = "Algerian";
+			fontWhite.leftMargin = 2;
+			fontWhite.rightMargin = 2;
+			fontWhite.color = 0xFFFFFF;
+			fontWhite.align = TextFormatAlign.LEFT;
+			
+			fontCalc = new TextFormat();
+			fontCalc.size = 45;
+			fontCalc.font = "Consolas";
+			fontCalc.leftMargin = 2;
+			fontCalc.rightMargin = 2;
+			fontCalc.color = 0x990000;
+			fontCalc.align = TextFormatAlign.RIGHT;
+			
+			font = new TextFormat();
+			font.size = 30;
+			font.font = "Algerian";
+			font.leftMargin = 2;
+			font.rightMargin = 2;
+			font.align = TextFormatAlign.LEFT;
+			
+			fontTooltip = new TextFormat();
+			fontTooltip.size = 20;
+			fontTooltip.font = "Algerian";
+			fontTooltip.align = TextFormatAlign.LEFT;
+			
+			fontUnderlined = new TextFormat();
+			fontUnderlined.size = 30;
+			fontUnderlined.font = "Algerian";
+			fontUnderlined.underline = true;
+			fontUnderlined.align = TextFormatAlign.LEFT;
+			
+			//// FONTS END ////
+			
+			initializeGoodsAndIndustries();
 			
 			gameSpeed = 1; // 1, 2, 4;
 			changeDay = new DayChange();
@@ -246,42 +364,42 @@ package
 			changeDay.stopProgress();
 		}
 		
-		private static function initializeGoodsAnIndustries():void
+		private static function initializeGoodsAndIndustries():void
 		{
 			/*** TradeGood Templates ***/
 			/**********************************/
 			// necessary
-			Meat = 		new TradeGood(5, 1, "Meat", 10, 1, 1.0);
-			Milk = 		new TradeGood(5, 1, "Milk", 10, 1, 1);
-			Wheat = 	new TradeGood(5, 1, "Wheat", 10, 1, 1);
-			Bread = 	new TradeGood(5, 1, "Bread", 10, 1, 1);
-			Water = 	new TradeGood(5, 1, "Water", 10, 1, 1);
-			Forage = 	new TradeGood(5, 1, "Forage", 10, 1, 1);
+			Meat = 		new TradeGood(5, 1, "Meat", 	10);
+			Milk = 		new TradeGood(5, 1, "Milk", 	10);
+			Wheat = 	new TradeGood(5, 1, "Wheat", 	10);
+			Bread = 	new TradeGood(5, 1, "Bread", 	10, "People like to eat it. Chomp it, Munch it and even sometimes punch it.");
+			Water = 	new TradeGood(5, 1, "Water", 	10);
+			Forage = 	new TradeGood(5, 1, "Forage", 	10);
 			
 			// luxury
-			Wood = 		new TradeGood(5, 1, "Wood", 10, 1, 1);
-			Wool = 		new TradeGood(5, 1, "Wool", 10, 1, 1);
-			Clothes = 	new TradeGood(5, 1, "Clothes", 10, 1, 1);
-			Stone = 	new TradeGood(5, 1, "Stone", 10, 1, 1);
-			Jewelry = 	new TradeGood(5, 1, "Jewelry", 10, 1, 1);
-			Pottery = 	new TradeGood(5, 1, "Pottery", 10, 1, 1);
+			Wood = 		new TradeGood(5, 1, "Wood", 	10);
+			Wool = 		new TradeGood(5, 1, "Wool", 	10);
+			Clothes = 	new TradeGood(5, 1, "Clothes", 	10);
+			Stone = 	new TradeGood(5, 1, "Stone", 	10);
+			Jewelry = 	new TradeGood(5, 1, "Jewelry", 	10);
+			Pottery = 	new TradeGood(5, 1, "Pottery", 	10);
 			/**********************************/
 			
 			/*** Industry Templates ***/
 			/**********************************/
-			// food production
-			Bakery = 				new Industry(10, "Bakery", 				new Vector.<TradeGood>([Bread]), new Vector.<TradeGood>([Water, Wheat]), 1);
-			WheatPlantation = 		new Industry(10, "WheatPlantation", 	new Vector.<TradeGood>([Wheat]), new Vector.<TradeGood>([Water]), 1);
-			CattleBreeding = 		new Industry(10, "CattleBreeding", 		new Vector.<TradeGood>([Meat, Milk, Wool]), new Vector.<TradeGood>([Water, Forage]), 1);
-			WaterWell = 			new Industry(10, "WaterWell", 			new Vector.<TradeGood>([Water]), null, 1);
-			ForagePlantation = 		new Industry(10, "ForagePlantation", 	new Vector.<TradeGood>([Forage]), null, 1);
+			// food production					Salary, Name,				ProductionFactors,		ConsumingFactors,	Production,								Consumation,					Industry size by default
+			Bakery = 				new Industry(10, "Bakery", 				new <int>[10], 			new <int>[10, 20], 	new <TradeGood>[Bread], 				new <TradeGood>[Water, Wheat], 	1);
+			WheatPlantation = 		new Industry(10, "WheatPlantation", 	new <int>[30], 			new <int>[100], 	new <TradeGood>[Wheat], 				new <TradeGood>[Water], 		1);
+			CattleBreeding = 		new Industry(10, "CattleBreeding", 		new <int>[6, 12, 2], 	new <int>[40, 35], 	new <TradeGood>[Meat, Milk, Wool], 		new <TradeGood>[Water, Forage], 1);
+			WaterWell = 			new Industry(10, "WaterWell", 			new <int>[200], 		null, 		 		new <TradeGood>[Water], 				null, 							1);
+			ForagePlantation = 		new Industry(10, "ForagePlantation", 	new <int>[70], 			new <int>[100], 	new <TradeGood>[Forage], 				new <TradeGood>[Water], 		1);
 			
 			// luxury production
-			StoneMason = 			new Industry(10, "StoneMason", 			new Vector.<TradeGood>([Stone]), null, 1);
-			Jeweller = 				new Industry(10, "Jeweller", 			new Vector.<TradeGood>([Jewelry]), null, 1);
-			Potterer = 				new Industry(10, "Potterer", 			new Vector.<TradeGood>([Pottery]), null, 1);
-			WoodCutter = 			new Industry(10, "WoodCutter", 			new Vector.<TradeGood>([Wood]), null, 1);
-			ClothesProduction = 	new Industry(10, "ClothesProduction", 	new Vector.<TradeGood>([Clothes]), new Vector.<TradeGood>([Wool]), 1);
+			StoneMason = 			new Industry(10, "StoneMason", 			new <int>[25], 			null, 		 		new <TradeGood>[Stone], 				null, 							1);
+			Jeweller = 				new Industry(10, "Jeweller", 			new <int>[2], 			null, 		 		new <TradeGood>[Jewelry], 				null, 							1);
+			Potterer = 				new Industry(10, "Potterer", 			new <int>[6], 			null, 		 		new <TradeGood>[Pottery], 				null, 							1);
+			WoodCutter = 			new Industry(10, "WoodCutter", 			new <int>[15], 			null, 		 		new <TradeGood>[Wood], 					null, 							1);
+			ClothesProduction = 	new Industry(10, "ClothesProduction", 	new <int>[4], 			new <int>[40], 		new <TradeGood>[Clothes], 				new <TradeGood>[Wool], 			1);
 			/**********************************/
 		}
 		

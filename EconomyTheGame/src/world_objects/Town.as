@@ -41,7 +41,7 @@ package world_objects
 			_worldObjName = _townName;
 			size = _townSize;
 			
-			if(size < 200)
+			if(size < 250)
 			{
 				title = titles[2];
 				setScale(0.8);
@@ -85,6 +85,8 @@ package world_objects
 
 		private function initialize():void
 		{
+			wealth = Math.ceil(Math.random()*(size-size/2))+(size/2) *2;
+			
 			sign.selectable = false;
 			sign.mouseEnabled = false;
 			sign.x = (-200+image.width)/2;
@@ -96,16 +98,19 @@ package world_objects
 			sign.backgroundColor = 0xEC9035;
 			
 			assignIndustries();
+			assignTradegoods();
 		}
 		
 		private function assignIndustries():void
 		{
 			_industries = new Vector.<Industry>();
 			_industries.push(Assets.Bakery.clone());
+			_industries.push(Assets.WheatPlantation.clone());
 			_industries.push(Assets.ClothesProduction.clone());
 			_industries.push(Assets.ForagePlantation.clone());
 			_industries.push(Assets.WoodCutter.clone());
 			
+			// Create random generator for industries
 			if(title == titles[0])
 			{
 				// focus on postProduction
@@ -117,6 +122,57 @@ package world_objects
 			else
 			{
 				// focus on Rawmaterial Production
+			}
+		}
+		
+		private function assignTradegoods():void
+		{
+			_tradeGoods = new Vector.<TradeGood>();
+			
+			// loop all towns industries
+			for(var i:int = 0; i < _industries.length; i++)
+			{
+				// loop all industries and give wealth * townSize amount of industries output TradeGoods plus half of the consuming TradeGoods
+				var factor:int = 0;
+				// loop i:th industrys yielding
+				for each(var product:TradeGood in _industries[i].productYield)
+				{
+					var found1:Boolean = false;
+					// loop through tradegoods already on list
+					for each(var tradegood1:TradeGood in _tradeGoods)
+						// to check if it has already same tradegood
+						if(product.compareGoods(tradegood1))
+						{
+							// if does, add just amount in it
+							tradegood1.addGoods(wealth*size*_industries[i].productionFactor[factor] /4 /100);
+							found1 = true;
+							break;
+						}
+					
+					if(!found1)
+					{
+						_tradeGoods.push(product.clone(wealth*size*_industries[i].productionFactor[factor] /4 /100));
+					}
+					factor++;
+				}
+				factor = 0;
+				for each(var consumedProduct:TradeGood in _industries[i].productConsumed)
+				{
+					var found2:Boolean = false;
+					for each(var tradegood2:TradeGood in _tradeGoods)
+						if(consumedProduct.compareGoods(tradegood2))
+						{
+							tradegood2.addGoods((wealth*size*_industries[i].consumingFactor[factor] /4 /100)/2);
+							found2 = true;
+							break;
+						}
+						
+					if(!found2)
+					{
+						_tradeGoods.push(consumedProduct.clone((wealth*size*_industries[i].consumingFactor[factor] /4 /100)/2));
+					}
+					factor++;
+				}
 			}
 		}
 		

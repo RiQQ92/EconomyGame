@@ -1,5 +1,6 @@
 package world_objects
 {
+	import flash.events.Event;
 	import flash.geom.Point;
 
 	public class Moving extends WorldObject
@@ -33,7 +34,7 @@ package world_objects
 			return retPoint;
 		}
 		
-		override public function destruct():void
+		override public function destruct(evt:Event = null):void
 		{
 			super.destruct();
 		}
