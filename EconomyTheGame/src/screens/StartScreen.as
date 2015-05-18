@@ -8,7 +8,6 @@ package screens
 	import ui_objects.Button;
 	import ui_objects.ScrollList;
 	
-	import utility.Calculator;
 	import utility.ScreenHandle;
 
 	public class StartScreen extends Screen
@@ -17,7 +16,6 @@ package screens
 		private var loadBtn:Button = new Button("LoadMenuBtn");
 		private var optionsBtn:Button = new Button("OptionsMenuBtn");
 		private var creditsBtn:Button = new Button("CreditsMenuBtn");
-		private var calc:Calculator = new Calculator(function(amnt:int):void{trace("Function called properly, amount is: "+amnt);}, 1000000000);
 		
 		public function StartScreen()
 		{
@@ -43,9 +41,6 @@ package screens
 			creditsBtn.x = this.width/2 - newBtn.width/2;
 			creditsBtn.y = this.height/4 +300 - newBtn.height/2;
 			
-			calc.x = this.width/2 -calc.width/2;
-			calc.y = this.height/2 - calc.height/2;
-			
 			newBtn.addEventListener(MouseEvent.CLICK, startNew);
 			optionsBtn.addEventListener(MouseEvent.CLICK, openOptions);
 		}
@@ -69,7 +64,6 @@ package screens
 			this.addChild(loadBtn);
 			this.addChild(optionsBtn);
 			this.addChild(creditsBtn);
-			this.addChild(calc);
 		}
 		
 		private function removeListeners():void

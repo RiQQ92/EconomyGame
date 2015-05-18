@@ -154,7 +154,21 @@ package game_objects
 			
 			amountIndicator.text = temp;
 		}
-		
+		public function setAmount(_amount:int):void
+		{
+			if(_amount > -1)
+				this.amount = _amount;
+			
+			var temp:String = "";
+			if(amount > 1000000)
+				temp = (Math.round(amount/1000000)).toString()+"M";
+			else if(amount > 10000)
+				temp = (Math.round(amount/1000)).toString()+"K";
+			else
+				temp = amount.toString();
+			
+			amountIndicator.text = temp;
+		}
 		public function clone(_amount:int = 1):TradeGood
 		{
 			var t:TradeGood = new TradeGood(price, _amount, goodsName, quality, tooltip);

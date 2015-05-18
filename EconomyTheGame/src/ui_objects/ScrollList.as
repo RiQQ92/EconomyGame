@@ -12,6 +12,7 @@ package ui_objects
 	
 	public class ScrollList extends Sprite
 	{
+		private var tempFound:Boolean;
 		private var isVertical:Boolean;
 		private var hasItemSwapMenu:Boolean;
 		private var multipleSwapMenus:Boolean;
@@ -278,7 +279,7 @@ package ui_objects
 								transferCalc = new Calculator(swapAmount, _item.amount);
 								transferCalc.x = -this.x + Assets.gameStage.stageWidth/2 -transferCalc.width/2;
 								transferCalc.y = -this.y + Assets.gameStage.stageHeight/2 -transferCalc.height/2;
-								found = true;
+								tempFound = true;
 								this.addChild(transferCalc);
 							}
 							else
@@ -303,8 +304,26 @@ package ui_objects
 					{
 						if(item == _item)
 						{
-							removeItemByReference(_item);
-							menuToSwapWith.receiveSwapItem(_item, this);
+							if(_item.amount)
+							{
+								if(_item.amount > 1)
+								{
+									transferCalc = new Calculator(swapAmount, _item.amount);
+									transferCalc.x = -this.x + Assets.gameStage.stageWidth/2 -transferCalc.width/2;
+									transferCalc.y = -this.y + Assets.gameStage.stageHeight/2 -transferCalc.height/2;
+									this.addChild(transferCalc);
+								}
+								else
+								{
+									removeItemByReference(_item);
+									menuToSwapWith.receiveSwapItem(_item, this);
+								}
+							}
+							else
+							{
+								removeItemByReference(_item);
+								menuToSwapWith.receiveSwapItem(_item, this);
+							}
 							break;
 						}
 					}
@@ -314,22 +333,94 @@ package ui_objects
 		
 		private function swapAmount(amount:int):void
 		{
+			var found:Boolean = false;
+			var itemToAdd:* = null;
 			if(multipleSwapMenus)
 			{
-				removeItemByReference(itemToSwap);
-				
 				for(var i:int = 0; i < tempSwappedItem.itemOwner.itemList.length; i++)
 				{
 					// find if other list already has same item
-					tempSwappedItem.itemOwner.itemList;
+					if(itemToSwap.compareGoods(tempSwappedItem.itemOwner.itemList[i]))
+					{
+						found = true;
+						itemToAdd = tempSwappedItem.itemOwner.itemList[i];
+						break;
+					}
+				}
+				if(found)
+				{
+					itemToAdd.addGoods(amount);
+					itemToSwap.removeGoods(amount);
+				}
+				else
+				{
+					var _item:* = itemToSwap.clone();
+					itemToSwap.removeGoods(amount);
+					_item.setAmount(amount);
+					tempSwappedItem.itemOwner.addItem(_item);
 				}
 				
-				tempSwappedItem.itemOwner.addItem(itemToSwap);
-			}
-				
+				if(amount == itemToSwap.amount)
+					removeItemByReference(itemToSwap);
+			}	
 			else
 			{
-				;
+				if(!tempFound)
+				{
+					for(var i:int = 0; i < tempSwappedItem.itemOwner.itemList.length; i++)
+					{
+						// find if other list already has same item
+						if(itemToSwap.compareGoods(tempSwappedItem.itemOwner.itemList[i]))
+						{
+							found = true;
+							itemToAdd = tempSwappedItem.itemOwner.itemList[i];
+							break;
+						}
+					}
+					if(found)
+					{
+						itemToAdd.addGoods(amount);
+						itemToSwap.removeGoods(amount);
+					}
+					else
+					{
+						var _item:* = itemToSwap.clone();
+						itemToSwap.removeGoods(amount);
+						_item.setAmount(amount);
+						menuToSwapWith.receiveSwapItem(_item, this);
+					}
+					
+					if(amount == itemToSwap.amount)
+						removeItemByReference(itemToSwap);
+				}
+				else
+				{
+					for(var i:int = 0; i < tempSwappedItem.itemOwner.itemList.length; i++)
+					{
+						// find if other list already has same item
+						if(itemToSwap.compareGoods(tempSwappedItem.itemOwner.itemList[i]))
+						{
+							found = true;
+							itemToAdd = tempSwappedItem.itemOwner.itemList[i];
+							break;
+						}
+					}
+					if(found)
+					{
+						itemToAdd.addGoods(amount);
+						itemToSwap.removeGoods(amount);
+					}
+					else
+					{
+						var _item:* = itemToSwap.clone();
+						itemToSwap.removeGoods(amount);
+						_item.setAmount(amount);
+						tempSwappedItem.itemOwner.addItem(_item);
+					}
+					
+					if(amount == itemToSwap.amount)
+						removeItemByReference(itemToSwap);
+				}
 			}
 		}
 		
