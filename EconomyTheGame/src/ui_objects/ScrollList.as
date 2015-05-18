@@ -8,6 +8,8 @@ package ui_objects
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	
+	import utility.Calculator;
+	
 	public class ScrollList extends Sprite
 	{
 		private var isVertical:Boolean;
@@ -34,11 +36,16 @@ package ui_objects
 		
 		private var slide:Button;
 		
+		private var transferCalc:Calculator;
+		
 		private var menuToSwapWith:ScrollList;
 		private var swappedItemsList:Array; // has Objects(swappedItem:*, originalOwner:ScrollList)
-		private var itemList:Array;
+		
+		private var tempSwappedItem:* = null;
+		private var itemToSwap:* = null;
 		
 		public var selectedTarget:* = null;
+		public var itemList:Array;
 		
 		public function ScrollList(_width:int = 50, _height:int = 150, _isVertical:Boolean = true, _hasSwapMenus:Boolean = false, _hasMultiSwapMenus:Boolean = false, _swapMenu:ScrollList = null)
 		{
@@ -222,39 +229,76 @@ package ui_objects
 		
 		private function swapItem(event:MouseEvent):void
 		{
-			trace("SwapItem called!");
 			var _item:* = event.target;
+			itemToSwap = _item;
 			if(multipleSwapMenus)
 			{
-				trace("ScrollList has multimenus!");
 				for each(var swappedItem:* in swappedItemsList)
 				{
 					if(swappedItem.swapItem == _item)
 					{
-						removeItemByReference(_item);
-						swappedItem.itemOwner.addItem(_item);
+						if(_item.amount)
+						{
+							if(_item.amount > 1)
+							{
+								tempSwappedItem = swappedItem;
+								transferCalc = new Calculator(swapAmount, _item.amount);
+								transferCalc.x = -this.x + Assets.gameStage.stageWidth/2 -transferCalc.width/2;
+								transferCalc.y = -this.y + Assets.gameStage.stageHeight/2 -transferCalc.height/2;
+								this.addChild(transferCalc);
+							}
+							else
+							{
+								removeItemByReference(_item);
+								swappedItem.itemOwner.addItem(_item);
+							}
+						}
+						else
+						{
+							removeItemByReference(_item);
+							swappedItem.itemOwner.addItem(_item);
+						}
 						break;
 					}
 				}
 			}
 			else
 			{
-				trace("Scroll list doesn't have multimenus!");
 				// else check whether it is own item or not then send it to other ScrollList
 				var found:Boolean = false;
 				for each(var swappedItem2:* in swappedItemsList)
 				{
 					if(swappedItem2.swapItem == _item)
 					{
-						removeItemByReference(_item);
-						swappedItem2.itemOwner.addItem(_item);
-						found = true;
+						if(_item.amount)
+						{
+							if(_item.amount > 1)
+							{
+								tempSwappedItem = swappedItem2;
+								transferCalc = new Calculator(swapAmount, _item.amount);
+								transferCalc.x = -this.x + Assets.gameStage.stageWidth/2 -transferCalc.width/2;
+								transferCalc.y = -this.y + Assets.gameStage.stageHeight/2 -transferCalc.height/2;
+								found = true;
+								this.addChild(transferCalc);
+							}
+							else
+							{
+								removeItemByReference(_item);
+								swappedItem2.itemOwner.addItem(_item);
+								found = true;
+							}
+						}
+						else
+						{
+							removeItemByReference(_item);
+							swappedItem2.itemOwner.addItem(_item);
+							found = true;
+						}
 						break;
 					}
 				}
 				if(!found)
 				{
-					trace("nothing found at swappedItemsList!");
 					for each(var item:* in itemList)
 					{
 						if(item == _item)
@@ -265,6 +309,27 @@ package ui_objects
 						}
 					}
 				}
+			}
+		}
+		
+		private function swapAmount(amount:int):void
+		{
+			if(multipleSwapMenus)
+			{
+				removeItemByReference(itemToSwap);
+				
+				for(var i:int = 0; i < tempSwappedItem.itemOwner.itemList.length; i++)
+				{
+					// find if other list already has same item
+					tempSwappedItem.itemOwner.itemList;
+				}
+				
+				tempSwappedItem.itemOwner.addItem(itemToSwap);
+			}
+				
+			else
+			{
+				;
 			}
 		}
 		

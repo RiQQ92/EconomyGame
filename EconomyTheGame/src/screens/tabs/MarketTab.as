@@ -6,6 +6,8 @@ package screens.tabs
 	
 	import ui_objects.Button;
 	import ui_objects.ScrollList;
+	
+	import utility.Calculator;
 
 	public class MarketTab extends Tab
 	{
