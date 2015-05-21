@@ -40,12 +40,12 @@ package ui_objects
 		private var transferCalc:Calculator;
 		
 		private var menuToSwapWith:ScrollList;
-		private var swappedItemsList:Array; // has Objects(swappedItem:*, originalOwner:ScrollList)
 		
 		private var tempSwappedItem:* = null;
 		private var itemToSwap:* = null;
 		
 		public var selectedTarget:* = null;
+		public var swappedItemsList:Array; // has Objects(swappedItem:*, originalOwner:ScrollList)
 		public var itemList:Array;
 		
 		public function ScrollList(_width:int = 50, _height:int = 150, _isVertical:Boolean = true, _hasSwapMenus:Boolean = false, _hasMultiSwapMenus:Boolean = false, _swapMenu:ScrollList = null)
@@ -348,42 +348,12 @@ package ui_objects
 				}
 				if(found)
 				{
-					if(itemToAdd.itemOwner != this)
-					{
-						if(itemToAdd.swapItem.amount == amount)
-						{
-							itemToAdd.removeItemByReference(itemToAdd.swapItem);
-						}
-						else if(itemToAdd.swapItem.amount > amount)
-						{
-							itemToAdd.removeGoods(amount);
-						}
-						else
-						{
-							var tempOwner:* = itemToAdd.itemOwner;
-							var tempAmount:int = amount -itemToAdd.swapItem.amount;
-							
-							itemToAdd.removeItemByReference(itemToAdd.swapItem);
-							
-							var transferItem:* = itemToSwap.clone();
-							transferItem.setAmount(tempAmount);
-							tempOwner.receiveSwapItem(transferItem);
-							
-							if(amount >= itemToSwap.amount)
-								removeItemByReference(itemToSwap);
-							else
-								itemToSwap.removeGoods(tempAmount);
-						}
-					}
+					itemToAdd.addGoods(amount);
+					
+					if(amount >= itemToSwap.amount)
+						removeItemByReference(itemToSwap);
 					else
-					{
-						itemToAdd.addGoods(amount);
-						
-						if(amount >= itemToSwap.amount)
-							removeItemByReference(itemToSwap);
-						else
-							itemToSwap.removeGoods(amount);
-					}
+						itemToSwap.removeGoods(amount);
 				}
 				else
 				{
@@ -397,11 +367,97 @@ package ui_objects
 					_item.setAmount(amount);
 					tempSwappedItem.itemOwner.addItem(_item);
 				}
-				
 			}	
 			else
 			{
-				if(!tempFound)
+				for(var d:int = 0; d < menuToSwapWith.swappedItemsList.length; d++)
+				{
+					if(itemToSwap.compareGoods(menuToSwapWith.swappedItemsList[d].swapItem))
+					{
+						itemToAdd = menuToSwapWith.swappedItemsList[d];
+						found = true;
+					}
+				}
+				
+				if(found)
+				{
+					if(itemToAdd.itemOwner != this)
+					{
+						var hasItem:Boolean = false;
+						var foundItem:* = null;
+						for(var g:int = 0; g < itemToAdd.itemOwner.itemList.length; g++)
+						{
+							if(itemToAdd.swapItem.compareGoods(itemToAdd.itemOwner.itemList[g]))
+							{
+								hasItem = true;
+								foundItem = itemToAdd.itemOwner.itemList[g];
+								break;
+							}
+						}
+						
+						if(itemToAdd.swapItem.amount == amount)
+						{
+							if(!hasItem)
+							{
+								itemToAdd.itemOwner.addItem(itemToAdd.swapItem.clone(amount));
+							}
+							else
+							{
+								foundItem.addGoods(amount);
+							}
+							
+							menuToSwapWith.removeItemByReference(itemToAdd.swapItem);
+						}
+						else if(itemToAdd.swapItem.amount > amount)
+						{
+							itemToAdd.swapItem.removeGoods(amount);
+							
+							if(!hasItem)
+							{
+								itemToAdd.itemOwner.addItem(itemToAdd.swapItem.clone(amount));
+							}
+							else
+							{
+								foundItem.addGoods(amount);
+							}
+						}
+						else
+						{
+							var tempAmount:int = amount -itemToAdd.swapItem.amount;
+							
+							
+							var transferItem:* = itemToSwap.clone();
+							transferItem.setAmount(tempAmount);
+							menuToSwapWith.receiveSwapItem(transferItem, this);
+							
+							if(tempAmount >= itemToSwap.amount)
+								removeItemByReference(itemToSwap);
+							else
+								itemToSwap.removeGoods(tempAmount);
+							
+							if(!hasItem)
+							{
+								itemToAdd.itemOwner.addItem(itemToAdd.swapItem.clone(itemToAdd.swapItem.amount));
+							}
+							else
+							{
+								foundItem.addGoods(itemToAdd.swapItem.amount);
+							}
+							
+							menuToSwapWith.removeItemByReference(itemToAdd.swapItem);
+						}
+					}
+					else
+					{
+						itemToAdd.swapItem.addGoods(amount);
+						
+						if(amount >= itemToSwap.amount)
+							removeItemByReference(itemToSwap);
+						else
+							itemToSwap.removeGoods(amount);
+					}
+				}
+				else if(!tempFound)
 				{
 					for(var b:int = 0; b < menuToSwapWith.itemList.length; b++)
 					{

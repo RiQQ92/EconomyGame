@@ -38,7 +38,8 @@ package world_objects
 			image.y = -image.height/2;
 			
 			goods = new Vector.<TradeGood>;
-			goods.push(Assets.Bread.clone(2000));
+			var tradeGood:TradeGood = Assets.Bread.clone(2000);
+			goods.push(tradeGood);
 			
 			//myStage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			//myStage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);

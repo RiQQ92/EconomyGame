@@ -70,7 +70,7 @@ package screens.tabs
 			for(i = 0; i < Assets.gameWorld.player.goods.length; i++)
 			{
 				var obj1:TradeGood = Assets.gameWorld.player.goods[i];
-				townsTradegoodList.addItem(obj1);
+				playersTradegoodList.addItem(obj1);
 			}
 		}
 	}
