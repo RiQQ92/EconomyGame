@@ -348,12 +348,42 @@ package ui_objects
 				}
 				if(found)
 				{
-					itemToAdd.addGoods(amount);
-					
-					if(amount >= itemToSwap.amount)
-						removeItemByReference(itemToSwap);
+					if(itemToAdd.itemOwner != this)
+					{
+						if(itemToAdd.swapItem.amount == amount)
+						{
+							itemToAdd.removeItemByReference(itemToAdd.swapItem);
+						}
+						else if(itemToAdd.swapItem.amount > amount)
+						{
+							itemToAdd.removeGoods(amount);
+						}
+						else
+						{
+							var tempOwner:* = itemToAdd.itemOwner;
+							var tempAmount:int = amount -itemToAdd.swapItem.amount;
+							
+							itemToAdd.removeItemByReference(itemToAdd.swapItem);
+							
+							var transferItem:* = itemToSwap.clone();
+							transferItem.setAmount(tempAmount);
+							tempOwner.receiveSwapItem(transferItem);
+							
+							if(amount >= itemToSwap.amount)
+								removeItemByReference(itemToSwap);
+							else
+								itemToSwap.removeGoods(tempAmount);
+						}
+					}
 					else
-						itemToSwap.removeGoods(amount);
+					{
+						itemToAdd.addGoods(amount);
+						
+						if(amount >= itemToSwap.amount)
+							removeItemByReference(itemToSwap);
+						else
+							itemToSwap.removeGoods(amount);
+					}
 				}
 				else
 				{
@@ -373,14 +403,14 @@ package ui_objects
 			{
 				if(!tempFound)
 				{
-					for(var i:int = 0; i < menuToSwapWith.itemList.length; i++)
+					for(var b:int = 0; b < menuToSwapWith.itemList.length; b++)
 					{
 						
 						// find if other list already has same item
-						if(itemToSwap.compareGoods(menuToSwapWith.itemList[i]))
+						if(itemToSwap.compareGoods(menuToSwapWith.itemList[b]))
 						{
 							found = true;
-							itemToAdd = menuToSwapWith.itemList[i];
+							itemToAdd = menuToSwapWith.itemList[b];
 							break;
 						}
 					}
@@ -395,26 +425,26 @@ package ui_objects
 					}
 					else
 					{
-						var _item:* = itemToSwap.clone();
+						var _item2:* = itemToSwap.clone();
 						
 						if(amount >= itemToSwap.amount)
 							removeItemByReference(itemToSwap);
 						else
 							itemToSwap.removeGoods(amount);
 						
-						_item.setAmount(amount);
-						menuToSwapWith.receiveSwapItem(_item, this);
+						_item2.setAmount(amount);
+						menuToSwapWith.receiveSwapItem(_item2, this);
 					}
 				}
 				else
 				{
-					for(var i:int = 0; i < tempSwappedItem.itemOwner.itemList.length; i++)
+					for(var c:int = 0; c < tempSwappedItem.itemOwner.itemList.length; c++)
 					{
 						// find if other list already has same item
-						if(itemToSwap.compareGoods(tempSwappedItem.itemOwner.itemList[i]))
+						if(itemToSwap.compareGoods(tempSwappedItem.itemOwner.itemList[c]))
 						{
 							found = true;
-							itemToAdd = tempSwappedItem.itemOwner.itemList[i];
+							itemToAdd = tempSwappedItem.itemOwner.itemList[c];
 							break;
 						}
 					}
@@ -429,15 +459,15 @@ package ui_objects
 					}
 					else
 					{
-						var _item:* = itemToSwap.clone();
+						var _item3:* = itemToSwap.clone();
 						
 						if(amount >= itemToSwap.amount)
 							removeItemByReference(itemToSwap);
 						else
 							itemToSwap.removeGoods(amount);
 						
-						_item.setAmount(amount);
-						tempSwappedItem.itemOwner.addItem(_item);
+						_item3.setAmount(amount);
+						tempSwappedItem.itemOwner.addItem(_item3);
 					}
 				}
 			}

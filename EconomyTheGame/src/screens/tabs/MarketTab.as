@@ -66,6 +66,12 @@ package screens.tabs
 			}
 			
 			// add players tradegoods to sell option list
+			playersTradegoodList.clearList();
+			for(i = 0; i < Assets.gameWorld.player.goods.length; i++)
+			{
+				var obj1:TradeGood = Assets.gameWorld.player.goods[i];
+				townsTradegoodList.addItem(obj1);
+			}
 		}
 	}
 }

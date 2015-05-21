@@ -5,9 +5,9 @@ package world_objects
 	import flash.events.Event;
 	import flash.geom.Point;
 	
+	import game_objects.TradeGood;
+	
 	import utility.VCam;
-	
-	
 	
 	public class Player extends Moving
 	{
@@ -23,6 +23,8 @@ package world_objects
 		private var cam:VCam;
 		private var creator:World;
 		
+		public var goods:Vector.<TradeGood>;
+		
 		public function Player(_creator:World)
 		{
 			image = Assets.getTexture("PlayerImage");
@@ -34,6 +36,9 @@ package world_objects
 			this.addChild(image);
 			image.x = -image.width/2;
 			image.y = -image.height/2;
+			
+			goods = new Vector.<TradeGood>;
+			goods.push(Assets.Bread.clone(2000));
 			
 			//myStage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			//myStage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
