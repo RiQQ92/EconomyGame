@@ -8,6 +8,9 @@ package ui_objects
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	
+	import my.events.MyEvents;
+	import my.events.ScrollListChange;
+	
 	import utility.Calculator;
 	
 	public class ScrollList extends Sprite
@@ -15,7 +18,6 @@ package ui_objects
 		private var tempFound:Boolean;
 		private var isVertical:Boolean;
 		private var hasItemSwapMenu:Boolean;
-		private var multipleSwapMenus:Boolean;
 		
 		private var scrollListWidth:int;
 		private var scrollListHeight:int;
@@ -44,6 +46,10 @@ package ui_objects
 		private var tempSwappedItem:* = null;
 		private var itemToSwap:* = null;
 		
+		public var evtDispatcher:ScrollListChange;
+		
+		public var multipleSwapMenus:Boolean;
+		
 		public var selectedTarget:* = null;
 		public var swappedItemsList:Array; // has Objects(swappedItem:*, originalOwner:ScrollList)
 		public var itemList:Array;
@@ -66,6 +72,16 @@ package ui_objects
 		
 		private function initialize():void
 		{
+			evtDispatcher = new ScrollListChange();
+			
+			if(menuToSwapWith)
+			{
+				if(menuToSwapWith.multipleSwapMenus)
+				{
+					menuToSwapWith.evtDispatcher.addEventListener(MyEvents.SCROLL_LIST_CHANGE, checkChanges);
+				}
+			}
+			
 			swappedItemsList = new Array();
 			
 			outerBorder = new Shape();
@@ -125,6 +141,77 @@ package ui_objects
 			this.addEventListener(MouseEvent.MOUSE_WHEEL, scroll);
 			this.addEventListener(MouseEvent.MOUSE_DOWN, removeSelection);
 			Assets.gameStage.addEventListener(MouseEvent.MOUSE_UP, drop);
+		}
+		
+		private function checkChanges(event:Event):void
+		{
+			for each(var _swapItem:* in menuToSwapWith.swappedItemsList)
+			{
+				if(_swapItem.itemOwner != this)
+				{
+					var found:Boolean = false;
+					var foundItem:* = null;
+					for each(var _item:* in this.itemList)
+					{
+						if(_item.compareGoods(_swapItem.swapItem))
+						{
+							found = true;
+							foundItem = _item;
+							break;
+						}
+					}
+					
+					if(found)
+					{
+						if(foundItem.offsetAmount == foundItem.amount)
+						{
+							foundItem.addTempGoods(_swapItem.swapItem.amount);
+						}
+						else
+						{
+							if((foundItem.amount -foundItem.offsetAmount) != _swapItem.swapItem.amount)
+							{
+								foundItem.setAmount(foundItem.offsetAmount);
+								foundItem.addTempGoods(_swapItem.swapItem.amount);
+							}
+						}
+					}
+					else
+					{
+						var addition:* = _swapItem.swapItem.clone(0);
+						addition.addTempGoods(_swapItem.swapItem.amount);
+						this.addItem(addition);
+					}
+				}
+			}
+			
+			// double check to remove/reset alredy removed trade parts
+			if(!multipleSwapMenus)
+			{
+				for each(var tradeItem:* in this.itemList)
+				{
+					if(tradeItem.amount != tradeItem.offsetAmount)
+					{
+						var found2:Boolean = false;
+						for each(var swappedItem:* in menuToSwapWith.swappedItemsList)
+						{
+							if(swappedItem.swapItem.compareGoods(tradeItem))
+							{
+								found2 = true;
+								break;
+							}
+						}
+						
+						if(!found2)
+						{
+							if(tradeItem.offsetAmount <= 0)
+								this.removeItemByReference(tradeItem);
+							else
+								tradeItem.setAmount(tradeItem.offsetAmount);
+						}
+					}
+				}
+			}
 		}
 		
 		private function draw():void
@@ -252,12 +339,16 @@ package ui_objects
 							{
 								tempSwappedItem = swappedItem;
 								swapAmount(1);
+								
+								evtDispatcher.dispatchChange();
 							}
 						}
 						else
 						{
 							removeItemByReference(_item);
 							swappedItem.itemOwner.addItem(_item);
+							
+							evtDispatcher.dispatchChange();
 						}
 						break;
 					}
@@ -287,6 +378,8 @@ package ui_objects
 								tempSwappedItem = swappedItem2;
 								tempFound = true;
 								swapAmount(1);
+								
+								evtDispatcher.dispatchChange();
 							}
 						}
 						else
@@ -294,6 +387,8 @@ package ui_objects
 							removeItemByReference(_item);
 							swappedItem2.itemOwner.addItem(_item);
 							found = true;
+							
+							evtDispatcher.dispatchChange();
 						}
 						break;
 					}
@@ -316,12 +411,16 @@ package ui_objects
 								else
 								{
 									swapAmount(1);
+									
+									evtDispatcher.dispatchChange();
 								}
 							}
 							else
 							{
 								removeItemByReference(_item);
 								menuToSwapWith.receiveSwapItem(_item, this);
+								
+								evtDispatcher.dispatchChange();
 							}
 							break;
 						}
@@ -348,7 +447,7 @@ package ui_objects
 				}
 				if(found)
 				{
-					itemToAdd.addGoods(amount);
+					itemToAdd.addTempGoods(amount);
 					
 					if(amount >= itemToSwap.amount)
 						removeItemByReference(itemToSwap);
@@ -367,7 +466,9 @@ package ui_objects
 					_item.setAmount(amount);
 					tempSwappedItem.itemOwner.addItem(_item);
 				}
-			}	
+				
+				evtDispatcher.dispatchChange();
+			}
 			else
 			{
 				for(var d:int = 0; d < menuToSwapWith.swappedItemsList.length; d++)
@@ -403,9 +504,9 @@ package ui_objects
 							}
 							else
 							{
-								foundItem.addGoods(amount);
+								foundItem.addTempGoods(amount);
 							}
-							
+							itemToSwap.removeTempGoods(amount);
 							menuToSwapWith.removeItemByReference(itemToAdd.swapItem);
 						}
 						else if(itemToAdd.swapItem.amount > amount)
@@ -418,22 +519,23 @@ package ui_objects
 							}
 							else
 							{
-								foundItem.addGoods(amount);
+								foundItem.addTempGoods(amount);
 							}
+							itemToSwap.removeTempGoods(amount);
 						}
 						else
 						{
 							var tempAmount:int = amount -itemToAdd.swapItem.amount;
-							
-							
 							var transferItem:* = itemToSwap.clone();
+							
 							transferItem.setAmount(tempAmount);
+							//itemToSwap.removeTempGoods(amount);
 							menuToSwapWith.receiveSwapItem(transferItem, this);
 							
 							if(tempAmount >= itemToSwap.amount)
 								removeItemByReference(itemToSwap);
 							else
-								itemToSwap.removeGoods(tempAmount);
+								itemToSwap.removeTempGoods(amount);
 							
 							if(!hasItem)
 							{
@@ -441,7 +543,7 @@ package ui_objects
 							}
 							else
 							{
-								foundItem.addGoods(itemToAdd.swapItem.amount);
+								foundItem.addTempGoods(itemToAdd.swapItem.amount);
 							}
 							
 							menuToSwapWith.removeItemByReference(itemToAdd.swapItem);
@@ -450,11 +552,7 @@ package ui_objects
 					else
 					{
 						itemToAdd.swapItem.addGoods(amount);
-						
-						if(amount >= itemToSwap.amount)
-							removeItemByReference(itemToSwap);
-						else
-							itemToSwap.removeGoods(amount);
+						itemToSwap.removeTempGoods(amount);
 					}
 				}
 				else if(!tempFound)
@@ -474,19 +572,13 @@ package ui_objects
 					{
 						itemToAdd.addGoods(amount);
 						
-						if(amount >= itemToSwap.amount)
-							removeItemByReference(itemToSwap);
-						else
-							itemToSwap.removeGoods(amount);
+						itemToSwap.removeTempGoods(amount);
 					}
 					else
 					{
 						var _item2:* = itemToSwap.clone();
 						
-						if(amount >= itemToSwap.amount)
-							removeItemByReference(itemToSwap);
-						else
-							itemToSwap.removeGoods(amount);
+						itemToSwap.removeTempGoods(amount);
 						
 						_item2.setAmount(amount);
 						menuToSwapWith.receiveSwapItem(_item2, this);
@@ -508,24 +600,20 @@ package ui_objects
 					{
 						itemToAdd.addGoods(amount);
 						
-						if(amount >= itemToSwap.amount)
-							removeItemByReference(itemToSwap);
-						else
-							itemToSwap.removeGoods(amount);
+						itemToSwap.removeTempGoods(amount);
 					}
 					else
 					{
 						var _item3:* = itemToSwap.clone();
 						
-						if(amount >= itemToSwap.amount)
-							removeItemByReference(itemToSwap);
-						else
-							itemToSwap.removeGoods(amount);
+						itemToSwap.removeTempGoods(amount);
 						
 						_item3.setAmount(amount);
 						tempSwappedItem.itemOwner.addItem(_item3);
 					}
 				}
+				
+				menuToSwapWith.evtDispatcher.dispatchChange();
 			}
 		}
 		
@@ -594,11 +682,37 @@ package ui_objects
 			return avrLength;
 		}
 		
+		public function saveChanges():void
+		{
+			for each(var _item:* in this.itemList)
+			{
+				_item.saveChanges();
+				if(_item.amount <= 0)
+				{
+					this.removeItemByReference(_item);
+				}
+			}
+		}
+		
+		public function cancelChanges():void
+		{
+			for each(var _item:* in this.itemList)
+			{
+				_item.cancelChanges();
+				if(_item.amount <= 0)
+				{
+					this.removeItemByReference(_item);
+				}
+			}
+		}
+		
 		public function receiveSwapItem(item:*, owner:ScrollList):void
 		{
 			var obj:Object = {swapItem:item, itemOwner:owner};
 			swappedItemsList.push(obj);
 			addItem(item);
+			
+			evtDispatcher.dispatchChange();
 		}
 		
 		public function addItem(_item:*):void
@@ -672,12 +786,16 @@ package ui_objects
 			
 			itemAverageLength = calcItemAverageLength();
 			setAllItemsPos();
+			
+			evtDispatcher.dispatchChange();
 		}
 		
 		public function removeItem(_index:int):*
 		{
 			var _item:*;
 			
+			
+			evtDispatcher.dispatchChange();
 			return _item;
 		}
 		
@@ -703,9 +821,27 @@ package ui_objects
 				}
 			}
 			
+			if(hasItemSwapMenu)
+			{
+				for(var b:int = swappedItemsList.length-1; b >= 0; b--)
+				{
+					if(swappedItemsList[b] != null)
+					{
+						if(this.contains(swappedItemsList[b].swapItem))
+						{
+							this.removeChild(swappedItemsList[b].swapItem);
+						}
+						swappedItemsList[b] = null;
+					}
+				}
+			}
+			
+			swappedItemsList = new Array();
 			itemList = new Array();
 			itemAverageLength = calcItemAverageLength();
 			setAllItemsPos();
+			
+			evtDispatcher.dispatchChange();
 		}
 	}
 }

@@ -1,12 +1,13 @@
 package my.events
 {
-	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 	
-	public class SliderChange extends Event
+	public class SliderChange extends EventDispatcher
 	{
-		public function SliderChange(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function SliderChange(target:IEventDispatcher=null)
 		{
-			super(type, bubbles, cancelable);
+			super(target);
 		}
 	}
 }

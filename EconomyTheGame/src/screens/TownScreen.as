@@ -19,7 +19,7 @@ package screens
 		private var industriesTabBtn:Button;
 		private var statisticsTabBtn:Button;
 		
-		private var exitBtn:Button;
+		public var exitBtn:Button;
 		
 		private var currentTab:*;
 		

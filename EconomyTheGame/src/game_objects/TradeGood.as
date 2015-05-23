@@ -1,7 +1,7 @@
 package game_objects
 {
-	import flash.events.MouseEvent;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	
@@ -10,6 +10,7 @@ package game_objects
 	public class TradeGood extends Button
 	{
 		public var amount:int;
+		public var offsetAmount:int;
 		
 		private var price:int;
 		
@@ -30,6 +31,7 @@ package game_objects
 			
 			price = _price;
 			amount = _amount;
+			offsetAmount = amount;
 			_quality = _Quality;
 			tooltip = _tooltip;
 			
@@ -124,51 +126,86 @@ package game_objects
 				tooltipText.y = Assets.gameStage.mouseY -tooltipText.height;
 		}
 		
+		private function roundNumbers():void
+		{
+			if(amount < offsetAmount)
+				amountIndicator.defaultTextFormat = Assets.fontRed;
+			else if(amount == offsetAmount)
+				amountIndicator.defaultTextFormat = Assets.fontWhite;
+			else
+				amountIndicator.defaultTextFormat = Assets.fontGreen;
+			
+			var temp:String = "";
+			if(amount > 1000000)
+				temp = (Math.round(amount/1000000)).toString()+"M";
+			else if(amount > 10000)
+				temp = (Math.round(amount/1000)).toString()+"K";
+			else
+				temp = amount.toString();
+			
+			amountIndicator.text = temp;
+		}
+		
 		public function addGoods(_amount:int): void
+		{
+			if(_amount > 0)
+				this.offsetAmount += _amount;
+			
+			amount = offsetAmount;
+			
+			roundNumbers();
+		}
+		
+		public function addTempGoods(_amount:int):void
 		{
 			if(_amount > 0)
 				this.amount += _amount;
 			
-			var temp:String = "";
-			if(amount > 1000000)
-				temp = (Math.round(amount/1000000)).toString()+"M";
-			else if(amount > 10000)
-				temp = (Math.round(amount/1000)).toString()+"K";
-			else
-				temp = amount.toString();
-			
-			amountIndicator.text = temp;
+			roundNumbers();
 		}
+		
 		public function removeGoods(_amount:int): void
+		{
+			if(_amount <= this.offsetAmount && offsetAmount > 0)
+				this.offsetAmount -= _amount;
+			
+			amount = offsetAmount;
+			
+			roundNumbers();
+		}
+		
+		public function removeTempGoods(_amount:int):void
 		{
 			if(_amount <= this.amount && amount > 0)
 				this.amount -= _amount;
 			
-			var temp:String = "";
-			if(amount > 1000000)
-				temp = (Math.round(amount/1000000)).toString()+"M";
-			else if(amount > 10000)
-				temp = (Math.round(amount/1000)).toString()+"K";
-			else
-				temp = amount.toString();
-			
-			amountIndicator.text = temp;
+			roundNumbers();
 		}
+		
 		public function setAmount(_amount:int):void
 		{
 			if(_amount > -1)
-				this.amount = _amount;
+				this.offsetAmount = _amount;
 			
-			var temp:String = "";
-			if(amount > 1000000)
-				temp = (Math.round(amount/1000000)).toString()+"M";
-			else if(amount > 10000)
-				temp = (Math.round(amount/1000)).toString()+"K";
-			else
-				temp = amount.toString();
+			amount = offsetAmount;
 			
-			amountIndicator.text = temp;
+			roundNumbers();
 		}
+		
+		public function saveChanges():void
+		{
+			offsetAmount = amount;
+			
+			roundNumbers();
+		}
+		
+		public function cancelChanges():void
+		{
+			amount = offsetAmount;
+			
+			roundNumbers();
+		}
+		
 		public function clone(_amount:int = 1):TradeGood
 		{
 			var t:TradeGood = new TradeGood(price, _amount, goodsName, quality, tooltip);

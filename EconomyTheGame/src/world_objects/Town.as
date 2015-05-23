@@ -77,10 +77,25 @@ package world_objects
 		{
 			return _tradeGoods;
 		}
+		
+		public function set tradeGoods(value:Vector.<TradeGood>):void
+		{
+			_tradeGoods = value;
+		}
 
 		public function get industries():Vector.<Industry>
 		{
 			return _industries;
+		}
+		
+		public function addGoods(good:TradeGood):void
+		{
+			_tradeGoods.push(good);
+		}
+		
+		public function clearGoods():void
+		{
+			_tradeGoods = new Vector.<TradeGood>;
 		}
 
 		private function initialize():void
@@ -184,7 +199,7 @@ package world_objects
 		
 		private function collectTaxes(evt:Event): int
 		{
-			trace(_worldObjName+" noticed day change and collecting taxes now!");
+			//trace(_worldObjName+" noticed day change and collecting taxes now!");
 			return 1;
 		}
 		

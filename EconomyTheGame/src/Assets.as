@@ -68,6 +68,10 @@ package
 		public static const IndustriesTownBtn:Class;
 		[Embed(source = "../Graphics/Town/StatisticsTownBtn.png")]
 		public static const StatisticsTownBtn:Class;
+		[Embed(source = "../Graphics/Town/TradeTownBtn.png")]
+		public static const TradeTownBtn:Class;
+		[Embed(source = "../Graphics/Town/ResetTownBtn.png")]
+		public static const ResetTownBtn:Class;
 		[Embed(source = "../Graphics/Town/ExitTownBtn.png")]
 		public static const ExitTownBtn:Class;
 		[Embed(source = "../Graphics/Town/CloseTownBtn.png")]
